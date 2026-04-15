@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ON THE BRINK // FIELD MANUAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#f4f4eb',
+                        ink: '#1a1a1a',
+                        olive: {
+                            700: '#4a513d',
+                            800: '#3b4231',
+                            900: '#262b1f',
+                        },
+                        stamp: '#b91c1c'
+                    },
+                    fontFamily: {
+                        stencil: ['"Black Ops One"', 'cursive'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter:wght@400;500;700&family=Share+Tech+Mono&display=swap');
+        
+        body {
+            background-color: #f4f4eb;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Black Ops One', cursive;
+            letter-spacing: 0.05em;
+            color: #262b1f;
+        }
+
+        h2 {
+            border-bottom: 3px solid #262b1f;
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+            color: #3b4231;
+            text-transform: uppercase;
+        }
+
+        .mono-text {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .stamp-classified {
+            color: #b91c1c;
+            border: 5px solid #b91c1c;
+            display: inline-block;
+            padding: 0.25rem 1.5rem;
+            font-family: 'Black Ops One', cursive;
+            font-size: 1.75rem;
+            transform: rotate(-4deg);
+            opacity: 0.85;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .manual-block {
+            border: 2px solid #262b1f;
+            background-color: rgba(38, 43, 31, 0.04);
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .manual-block::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(38, 43, 31, 0.15);
+            pointer-events: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 2px solid #262b1f;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        th, td {
+            border: 1px solid #262b1f;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e5e5dc;
+            font-family: 'Black Ops One', cursive;
+            font-weight: normal;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tactical-map {
+            background-color: #ffffff;
+            border: 2px solid #262b1f;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.1);
+        }
+
+        .tab-btn {
+            font-family: 'Black Ops One', cursive;
+            transition: all 0.2s ease;
+            letter-spacing: 0.05em;
+            font-size: 1.05rem;
+        }
+        .tab-btn.active {
+            background-color: #f4f4eb;
+            color: #262b1f;
+            border-bottom-color: #f4f4eb;
+        }
+        .tab-btn:not(.active) {
+            background-color: #d6d6ce;
+            color: #5a6053;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #e5e5dc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container-main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        strong {
+            font-weight: 700;
+            color: #262b1f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-main">
+        <!-- Header -->
+        <header class="border-b-4 border-olive-900 pb-10 mb-10 text-center relative">
+            <div class="absolute top-0 right-0 hidden md:block">
+                <div class="stamp-classified">CLASSIFIED</div>
+            </div>
+            <p class="mono-text font-bold text-sm tracking-widest text-olive-800 mb-4">TACTICAL COMMAND // FIELD MANUAL FM-01-0326</p>
+            <h1 class="text-6xl md:text-8xl mt-2 mb-4 leading-none">ON THE BRINK</h1>
+            <p class="text-xl md:text-2xl font-medium tracking-tight text-olive-800">TACTICAL GROUND COMBAT DOCTRINE</p>
+            <p class="mono-text text-sm mt-6 uppercase tracking-widest">Authorized Publication // Ver 0.3 // Sector 7</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex border-b-4 border-olive-900 mb-10 flex-wrap">
+            <button class="tab-btn active px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 -mb-1 relative z-10" onclick="openTab('tab-rules', this)">01. RULES</button>
+            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 border-b-4" onclick="openTab('tab-scenarios', this)">02. MISSIONS</button>
+            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 border-b-4" onclick="openTab('tab-special', this)">03. SPECIAL RULES</button>
+            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl border-b-4" onclick="openTab('tab-appendices', this)">04. APPENDICES</button>
+        </nav>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: CORE RULES                          -->
+        <!-- ========================================== -->
+        <div id="tab-rules" class="tab-content active">
+            
+            <div class="manual-block">
+                <h3 class="mt-0 text-olive-900">> DOCTRINAL AMENDMENTS (VER 0.3)</h3>
+                <ul class="list-disc pl-6 space-y-2 text-sm md:text-base">
+                    <li><strong>Unified Mechanics:</strong> All tests resolved via "Roll Over" D10 logic.</li>
+                    <li><strong>Standardized AP:</strong> 2 Action Points generated per activation; most actions cost 1 AP.</li>
+                    <li><strong>Command Logic:</strong> Activation Tokens are generated per surviving unit Leader.</li>
+                    <li><strong>Engagement:</strong> Melee is simultaneous; losers must pass LDR or retreat.</li>
+                    <li><strong>Structural Integrity:</strong> Hard Cover utilize ARM values; standard saves are ignored.</li>
+                    <li><strong>Stress Impact:</strong> Removed Pinned status; Stress provides cumulative LDR penalties.</li>
+                    <li><strong>Momentum Logic:</strong> Defined fixed attrition costs (-1 for Infantry, -2 for Vehicles).</li>
+                </ul>
+            </div>
+
+            <p class="text-xl font-medium leading-relaxed mb-10">
+                <em>On the Brink</em> is a wargame of high-stakes tactical combat where momentum shifts with every decision. Commanders must manage squad stress and casualties to break enemy resolve before their own forces collapse.
+            </p>
+
+            <h2>1. CORE CONCEPTS</h2>
+            
+            <h3>1.1 THE UNIFIED DICE MECHANIC</h3>
+            <p>To maintain high operational tempo, <strong>all dice rolls in On the Brink are "Roll Over"</strong>. When resolving any test—attacking, Survival Saves, or Leadership—roll a D10. Success is achieved by rolling <strong>equal to or higher</strong> than the specified Target Number (TN).</p>
+
+            <h3>1.2 MOMENTUM (VICTORY CONDITIONS)</h3>
+            <p>Momentum represents your army's overall operational tempo, morale, and will to fight. Both players typically begin the game with <strong>10 Momentum</strong>.</p>
+            <ul class="list-disc pl-8 space-y-2 mt-4">
+                <li><strong>Gaining Momentum:</strong> Securing objectives and destroying high-value enemy units adds Momentum.</li>
+                <li><strong>Losing Momentum:</strong> Taking casualties, failing critical Leadership tests, and losing objectives reduces your Momentum.</li>
+                <li><strong>Attrition Baseline:</strong> Whenever an Infantry Squad is completely destroyed, that player loses <strong>-1 Momentum</strong>. When a Vehicle is destroyed, that player loses <strong>-2 Momentum</strong>.</li>
+                <li><strong>Victory Condition:</strong> If a player's Momentum reaches <strong>0</strong>, their army breaks and they immediately lose the game. If the game reaches the turn limit, the player with the highest Momentum wins.</li>
+            </ul>
+
+            <h3>1.3 SQUAD INTEGRITY</h3>
+            <p>Infantry operate in rigid <strong>Squads</strong>. Each squad features a designated Leader model.</p>
+            <ul class="list-disc pl-8 space-y-2 mt-2">
+                <li>A Squad activates together, moves together, and tracks its Stress Tokens as a single cohesive unit.</li>
+                <li><strong>Cohesion:</strong> All models in a Squad must end their movement within 2" of at least one other model in their Squad.</li>
+                <li><em>Note: To speed up gameplay, Squads may NOT dynamically split into smaller elements mid-game.</em></li>
+            </ul>
+
+            <h2>2. THE BATTLE TURN</h2>
+            <p>Operations are divided into three distinct phases:</p>
+
+            <h3>I. COMMAND PHASE</h3>
+            <ol class="list-decimal pl-8 space-y-2 mt-2">
+                <li><strong>Activation Tokens:</strong> Each player surveys their forces. For every functional unit on the table (a unit that still has a living Leader model), the player receives <strong>1 Activation Token</strong>.</li>
+                <li><strong>Initiative:</strong> Both players roll a D10. The highest roller gains Initiative and decides who will take the first turn in the Active Phase.</li>
+            </ol>
+
+            <h3>II. ACTIVE PHASE</h3>
+            <p>Players alternate taking turns, starting with the player who won Initiative. On your turn, you may spend <strong>1 Activation Token</strong> to activate one unit or Pass. These tokens can be spent on any unit, meaning you may choose to activate the same unit multiple times.</p>
+            <ul class="list-disc pl-8 space-y-3 mt-4">
+                <li><strong>First Activation:</strong> When a unit is activated for the first time in a Game Turn, it automatically generates exactly <strong>2 Action Points (AP)</strong>.</li>
+                <li><strong>Multiple Activations (Pushing):</strong> You may spend an Activation Token to activate a unit that has <em>already</em> been activated this turn. To do so, the unit must immediately take a <strong>Leadership (LDR) test</strong>. <em>(Note: Stress Token penalties apply to this roll)</em>.
+                    <ul class="list-circle pl-8 mt-2 opacity-90">
+                        <li><strong>Success:</strong> The unit generates 2 AP and takes its activation normally.</li>
+                        <li><strong>Failure:</strong> The unit generates 0 AP, its activation ends immediately, and it automatically gains the <strong>Gone to Ground</strong> status.</li>
+                    </ul>
+                </li>
+                <li><strong>Passing & End of Phase:</strong> If a player chooses not to spend a token, they may <strong>Pass</strong>. If a player runs out of Activation Tokens, they must Pass. Once both players run out of tokens (or both players consecutively Pass), the Active Phase ends. Any remaining unspent tokens are discarded.</li>
+            </ul>
+
+            <h3>III. END PHASE</h3>
+            <ol class="list-decimal pl-8 space-y-2 mt-2">
+                <li><strong>Morale & Leadership:</strong> Units with high levels of Stress must take Leadership Tests.</li>
+                <li><strong>Rally:</strong> Surviving units remove 1 Stress Token.</li>
+                <li><strong>Check Victory:</strong> Evaluate Momentum. If neither player has hit 0, begin a new Game Turn.</li>
+            </ol>
+
+            <h2>3. TACTICAL ACTIONS</h2>
+            <p>When a unit activates successfully, it generates <strong>2 Action Points (AP)</strong>. <strong>All actions cost 1 AP.</strong> <br><strong>RESTRICTION:</strong> A unit may <strong>not</strong> perform the same action twice during a single activation, with the sole exception of the <strong>Move</strong> action, which may be repeated (e.g., Move + Move).</p>
+
+            <div class="manual-block mt-6">
+                <h3 class="mt-0 font-bold">AUTHORIZED ACTIONS [COST: 1 AP]</h3>
+                <ul class="space-y-3 mono-text text-sm">
+                    <li><strong>MOVE (1 AP):</strong> Travel up to MOV distance. May be performed twice per activation.</li>
+                    <li><strong>DASH (1 AP):</strong> Travel MOV + 2 inches. Incurs 1 Stress Token.</li>
+                    <li><strong>FIRE WEAPON (1 AP):</strong> Resolve ranged attack. Prohibited if Engaged.</li>
+                    <li><strong>TAKE COVER (1 AP):</strong> Gain <em>Gone to Ground</em> status (+1 SRV save).</li>
+                    <li><strong>ASSAULT (1 AP):</strong> Initiate Melee (requires models to be within 1" of enemy).</li>
+                    <li><strong>FALL BACK (1 AP):</strong> Move away from Engagement. Incurs 1 Stress. Enemy may make a free Reaction Attack.</li>
+                    <li><strong>SPECIAL (1 AP):</strong> Clear jams, Claim objectives, or Scenario-specific tasks.</li>
+                </ul>
+            </div>
+
+            <h3>3.1 EXECUTING MOVEMENT & ENGAGEMENT</h3>
+            <p>Follow these steps to ensure rapid deployment:</p>
+            <ol class="list-decimal pl-8 space-y-1 mt-2">
+                <li>Select the unit leader model.</li>
+                <li>Measure and move the leader model up to its movement value (or +2" if Dashing).</li>
+                <li>Pick up the remaining models and place them in their new positions within <strong>Cohesion</strong> (2").</li>
+            </ol>
+            <p class="mt-4 font-bold bg-olive-200 p-3 border border-olive-800 rounded">Engagement Range: If a unit ends its movement with any of its models within 1 inch of an enemy model, both units are now considered Engaged in Close Combat. Engaged units cannot perform the Fire Weapon action.</p>
+
+            <h3>3.2 REACTIONS</h3>
+            <p>When an inactive unit is targeted by an enemy attack, it may immediately choose to spend <strong>1 Stress Token</strong> to declare a <strong>Reaction Attack</strong>.</p>
+            <ul class="list-disc pl-8 mt-2 space-y-2">
+                <li><strong>Simultaneous Resolution:</strong> Reaction Fire attacks are considered to happen at the exact same time. Both players roll their attacks, saves, and damage simultaneously.</li>
+                <li><strong>Casualty Rule:</strong> If a model is reduced to 0 health during a simultaneous exchange, it still resolves its attack completely before being removed from the table as a casualty.</li>
+            </ul>
+
+            <h2>4. STATUS EFFECTS & MARKERS</h2>
+            <p>Units will accrue markers that dictate their condition and effectiveness throughout the battle.</p>
+            <ul class="list-disc pl-8 space-y-4 mb-6">
+                <li><strong>Stress Tokens:</strong> Accrued by being shot at, dashing, or failing combat.
+                    <ul class="list-circle pl-8 mt-2 opacity-90">
+                        <li><strong>Training Penalty:</strong> Having at least one Stress Token imposes a flat <strong>-1 penalty</strong> to all Attack rolls.</li>
+                        <li><strong>Leadership Penalty:</strong> Imposes a <strong>cumulative -1 penalty</strong> to Leadership tests for <em>each</em> Stress Token the unit currently has.</li>
+                    </ul>
+                </li>
+                <li><strong>Gone to Ground:</strong> Gained by performing the <em>Take Cover</em> action or by failing a Multiple Activation Leadership test. The unit gains a <strong>+1 bonus to their Survival (SRV) save</strong>. This status is immediately lost if the unit performs a Move, Dash, or Fall Back action, or if they are pushed back in Close Combat.</li>
+                <li><strong>Smoke:</strong> Placed by specific weapons or abilities. Smoke markers create a dense cloud (usually 3"). Line of Sight cannot be drawn through a smoke cloud. Dissipates during the End Phase of the following turn.</li>
+                <li><strong>Engaged:</strong> Applied automatically when within 1" of an enemy. Engaged units cannot fire ranged weapons and must either Assault or Fall Back.</li>
+            </ul>
+
+            <h2>5. RESOLVING RANGED COMBAT</h2>
+            <p>Combat is resolved in three distinct steps:</p>
+            
+            <h3>STEP 1: ROLL TO HIT</h3>
+            <p>Measure range and Line of Sight. Roll a D10 for each attack generated.</p>
+            <ul class="list-disc pl-8">
+                <li><strong>Target Number:</strong> The Firer’s Training (TRN) stat.</li>
+                <li><strong>Modifiers:</strong> Apply modifiers such as Target in Cover (-1) or Firing at close range (+1).</li>
+            </ul>
+
+            <h3>STEP 2: ROLL SAVES</h3>
+            <p>The type of save depends on the target classification:</p>
+            <ul class="list-disc pl-8 space-y-3">
+                <li><strong>Infantry (Survival Save):</strong> If in the open or light cover, roll D10 equal to or higher than <strong>Survival (SRV)</strong>. Weapon Penetration (Pen) has NO effect on SRV saves. Success = no damage. Failure = 1 Wound.</li>
+                <li><em>Exception:</em> Infantry inside Buildings or behind Hard Cover do not roll SRV (See Section 7).</li>
+                <li><strong>Vehicles (Armor Save):</strong> Vehicles do not roll SRV. The Attacker rolls an Anti-Tank Test: D10 + Weapon Penetration (Pen) value. If the total equals or exceeds Vehicle Armor (ARM) on the hit facing, the vehicle takes damage.</li>
+            </ul>
+
+            <h3>STEP 3: CASUALTIES & STRESS</h3>
+            <p>Remove one infantry model from the squad, or mark one structural point on a vehicle, for every unsaved Wound. <br><strong>Apply Stress:</strong> Regardless of saves, any unit successfully <strong>Hit</strong> by an attack immediately takes <strong>1 Stress Token</strong> for being under fire.</p>
+
+            <h2>6. RESOLVING CLOSE COMBAT</h2>
+            <p>Close Combat is swift, simultaneous, and decisive.</p>
+
+            <h3>STEP 1: SIMULTANEOUS STRIKES</h3>
+            <p>There is no attacker advantage. Both units fight simultaneously. Each player rolls <strong>1 D10 for every model</strong> in their unit within 1" of an enemy. Target Number is the unit's TRN. Cover modifiers are ignored.</p>
+
+            <h3>STEP 2 & 3: SAVES & ROUTING</h3>
+            <p>For every successful Hit, players roll SRV saves for their units as normal. After Wounds are applied, determine the winner:</p>
+            <ul class="list-disc pl-8 space-y-2">
+                <li>The unit that suffered the <strong>most unsaved Wounds</strong> is the loser.</li>
+                <li><strong>Leadership Test:</strong> The losing unit must immediately take a Leadership (LDR) test (applying stress penalties).
+                    <ul class="list-circle pl-8 mt-1">
+                        <li><em>Pass:</em> Hold ground, remain Engaged.</li>
+                        <li><em>Fail:</em> Take <strong>1 Stress Token</strong> and are forcibly pushed back 2" out of Engagement Range.</li>
+                    </ul>
+                </li>
+                <li><strong>Ties:</strong> If both sides suffered equal Wounds, neither side is pushed back.</li>
+            </ul>
+
+            <h2>7. TERRAIN AND COVER</h2>
+            
+            <h3>7.1 MOVEMENT TERRAIN</h3>
+            <ul class="list-disc pl-8 space-y-2">
+                <li><strong>Open Ground:</strong> Normal movement rules apply.</li>
+                <li><strong>Difficult Terrain:</strong> Dense woods, mud, rubble. Movement value is <strong>halved</strong> for that action (e.g., 6" becomes 3").</li>
+                <li><strong>Obstacles:</strong> Low walls, fences. It costs a unit <strong>2 inches</strong> of movement to cross an obstacle.</li>
+            </ul>
+
+            <h3>7.2 COVER TERRAIN</h3>
+            <ul class="list-disc pl-8 space-y-4">
+                <li><strong>Light Cover:</strong> Foliage, wooden fences, car hulls. Imposes a <strong>-1 penalty to enemy Ranged Hit rolls</strong> if obscured.</li>
+                <li><strong>Hard Cover & Buildings:</strong> Concrete bunkers, thick brick walls. Infantry in these positions act exactly like armored vehicles when attacked.
+                    <ul class="list-circle pl-6 mt-2 text-olive-800">
+                        <li><strong>Building/Cover ARM:</strong> Structures provide a flat Armor Value (e.g., ARM 6).</li>
+                        <li><strong>Resolution:</strong> Defenders DO NOT roll SRV. Attacker rolls Anti-Tank (D10 + Pen) against the structure's ARM for EACH hit.</li>
+                        <li><strong>Casualties:</strong> Every roll that equals or exceeds the ARM value removes one infantry model from the garrisoning squad.</li>
+                    </ul>
+                </li>
+                <li><strong>Elevation:</strong> Firing from an elevated position (at least 3" higher) ignores the target's Light Cover modifier.</li>
+            </ul>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: SCENARIOS                           -->
+        <!-- ========================================== -->
+        <div id="tab-scenarios" class="tab-content hidden">
+            
+            <h2>8. OPERATIONS LOGISTICS</h2>
+            <p>Objectives are captured by spending <strong>1 AP (Special Action)</strong> while in control (within 3" with no enemy present).</p>
+
+            <div class="bg-olive-900 text-white p-4 my-6 mono-text text-sm">
+                MOMENTUM SHIFTS:<br>
+                - CLAIM NEUTRAL: +2 MOMENTUM<br>
+                - STEAL ENEMY: +2 TO SELF / -2 TO ENEMY
+            </div>
+
+            <h2>9. MISSION FILES</h2>
+
+            <!-- Scenario 1 -->
+            <div class="manual-block">
+                <h3>OP 01: FRONTLINE CLASH</h3>
+                <p class="mb-6">Standard meeting engagement. Symmetrical objectives along the center axis.</p>
+
+                <div class="tactical-map w-full p-2">
+                    <svg viewBox="0 0 800 400" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="gridMap" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#eee" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="800" height="400" fill="#fff" />
+                        <rect width="800" height="400" fill="url(#gridMap)" />
+                        
+                        <rect x="0" y="0" width="800" height="100" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
+                        <rect x="0" y="300" width="800" height="100" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
+                        <line x1="0" y1="200" x2="800" y2="200" stroke="#262b1f" stroke-width="2" stroke-dasharray="10,5" />
+
+                        <g transform="translate(150, 200)">
+                            <circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" />
+                            <text x="0" y="30" fill="#262b1f" font-family="'Share Tech Mono'" font-size="14" text-anchor="middle">OBJ L</text>
+                        </g>
+                        <g transform="translate(400, 200)">
+                            <circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" />
+                            <text x="0" y="30" fill="#262b1f" font-family="'Share Tech Mono'" font-size="14" text-anchor="middle">OBJ C</text>
+                        </g>
+                        <g transform="translate(650, 200)">
+                            <circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" />
+                            <text x="0" y="30" fill="#262b1f" font-family="'Share Tech Mono'" font-size="14" text-anchor="middle">OBJ R</text>
+                        </g>
+                    </svg>
+                </div>
+                <ul class="list-disc pl-8 space-y-1 text-sm">
+                    <li><strong>Objectives:</strong> Center point and 12" inward from left/right edges.</li>
+                    <li><strong>No Man's Land:</strong> Attempting to Claim the center objective triggers 1 Stress from sniper fire.</li>
+                    <li><strong>Attrition:</strong> Turns 3-5: Player with fewer objectives drains -1 Momentum.</li>
+                </ul>
+            </div>
+
+            <!-- Scenario 4 -->
+            <div class="manual-block">
+                <h3>OP 04: HOLD THE LINE</h3>
+                <p class="mb-6">Garrison forces must defend localized intelligence from an encircling assault.</p>
+                <div class="tactical-map w-full p-2">
+                    <svg viewBox="0 0 800 500" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="800" height="500" fill="#fff" />
+                        <rect width="800" height="500" fill="url(#gridMap)" />
+                        <path d="M 0 0 L 800 0 L 800 500 L 0 500 Z M 80 80 L 80 420 L 720 420 L 720 80 Z" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" fill-rule="evenodd" />
+                        <rect x="250" y="150" width="300" height="200" fill="rgba(0,0,0,0.05)" stroke="#262b1f" stroke-width="2" />
+                        <g transform="translate(400, 250)"><circle cx="0" cy="0" r="18" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="4" fill="#262b1f" /><text x="0" y="35" fill="#262b1f" font-family="'Share Tech Mono'" font-size="12" font-weight="bold" text-anchor="middle">TOP SECRET</text></g>
+                    </svg>
+                </div>
+                <ul class="list-disc pl-8 space-y-1 text-sm">
+                    <li><strong>Dug In:</strong> Defender starts <em>Gone to Ground</em>.</li>
+                    <li><strong>Extraction:</strong> Extract intel via 1 AP Special Action (+4/-4 Momentum shift).</li>
+                </ul>
+            </div>
+            
+            <p class="text-sm italic opacity-75 text-center mt-4">Refer to Section 9 of printed Manual for Operations 02, 03, 05, and 06.</p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: SPECIAL RULES                       -->
+        <!-- ========================================== -->
+        <div id="tab-special" class="tab-content hidden">
+            <h2>10. SPECIAL RULES LEXICON</h2>
+            <p class="mb-6">Special rules represent unique weapon capabilities and unit training. If a special rule contradicts the core doctrine, the special rule takes precedence.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Anti-Aircraft (AA)</h4>
+                        <p class="text-sm">Optimized for tracking high-speed airborne targets. Ignores all standard negative modifiers when firing at Aircraft or Helicopter units.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Armor Piercing</h4>
+                        <p class="text-sm">Specialized kinetic or chemical penetrators. A natural Hit roll of 10 always succeeds and penetrates Armor, regardless of the target's ARM value.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Arc Fire</h4>
+                        <p class="text-sm">Indirect ballistic trajectory. May target enemy units outside of Line of Sight, provided a friendly unit has LOS to the target. Attacks suffer a -1 penalty.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Blast (X)</h4>
+                        <p class="text-sm">High-explosive payload. A successful hit inflicts <strong>X</strong> Wounds on the target unit. The defender must roll Survival saves for each wound individually.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Entrench</h4>
+                        <p class="text-sm">Superior defensive drilling. When performing <em>Take Cover</em>, the unit gains an additional +1 SRV save (total +2) as long as they remain stationary.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Gun Port</h4>
+                        <p class="text-sm">Protected firing positions. Up to 2 embarked infantry models may perform <em>Fire Weapon</em> actions using the vehicle's hull as the LOS origin.</p>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">One Shot</h4>
+                        <p class="text-sm">Disposable weapon system. This weapon may only be discharged once per engagement.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Open Hatch</h4>
+                        <p class="text-sm">Exposed crew. If used, any Infantry firing at the vehicle in the following turn generates a Stress Token on a successful Hit, even if the weapon cannot penetrate ARM.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Reload (X)</h4>
+                        <p class="text-sm">Sustained fire limitation. After firing, the unit must spend <strong>X</strong> total Action Points on <em>Special</em> actions to "Reload" before firing again.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Smoke (X)</h4>
+                        <p class="text-sm">Visual obscuration. Instead of attacking, place an X-inch smoke cloud. Blocks all Line of Sight. Dissipates at the start of the next turn's End Phase.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Suppression</h4>
+                        <p class="text-sm">Psychological effect. Any unit successfully hit by this weapon immediately suffers <strong>2 Stress Tokens</strong> instead of the standard 1.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Unreliable</h4>
+                        <p class="text-sm">Faulty mechanics. On a natural Hit roll of 1, the weapon jams. Must spend 1 AP on a <em>Special</em> action to clear before reuse.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-olive-900 font-bold mb-1 underline">Wire-Guided</h4>
+                        <p class="text-sm">Active guidance system. The unit cannot Move or Dash in the same activation it fires this weapon. Missed attacks may be rerolled.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: APPENDICES                          -->
+        <!-- ========================================== -->
+        <div id="tab-appendices" class="tab-content hidden">
+            
+            <h2>11. TECHNICAL SPECIFICATIONS</h2>
+            
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IDENTIFIER</th>
+                            <th>TRN</th>
+                            <th>LDR</th>
+                            <th>MOV</th>
+                            <th>SRV/ARM</th>
+                            <th>CLASS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Rifle Squad</td><td>5+</td><td>6+</td><td>6"</td><td>7+</td><td>Infantry</td></tr>
+                        <tr><td>M1 Abrams</td><td>6+</td><td>6+</td><td>10"</td><td>9 / 7 / 3</td><td>Heavy Vehicle</td></tr>
+                        <tr><td>T-72</td><td>6+</td><td>6+</td><td>10"</td><td>8 / 6 / 2</td><td>Vehicle</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>12. WEAPON SYSTEMS</h2>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SYSTEM</th>
+                            <th>DICE</th>
+                            <th>RNG</th>
+                            <th>PEN</th>
+                            <th>TRAITS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>.50 Cal MG</td><td>5</td><td>48"</td><td>3</td><td>AA, Suppression</td></tr>
+                        <tr><td>125mm HEAT</td><td>1</td><td>36"</td><td>2</td><td>Unreliable, AP</td></tr>
+                        <tr><td>AK-74</td><td>2</td><td>16"</td><td>0</td><td>-</td></tr>
+                        <tr><td>BGM-71 TOW</td><td>1</td><td>48"</td><td>4</td><td>Wire-Guided, Reload (2)</td></tr>
+                        <tr><td>M203 GL</td><td>1</td><td>16"</td><td>2</td><td>Blast (3), Arc Fire</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="manual-block text-sm text-center">
+                <p class="italic opacity-70">"Penetration values are applied exclusively to armored hulls and structural fortifications."</p>
+            </div>
+
+        </div>
+
+        <footer class="border-t-4 border-olive-900 pt-8 mt-16 text-center mono-text uppercase text-xs tracking-[0.2em] text-olive-800">
+            <p class="mb-2">Property of Tactical Command - Dissemination Prohibited</p>
+            <p class="mb-2">On the Brink // Doctrine 0.3 // Sector 7 Cleared</p>
+            <p class="font-bold">OnTheBrink: Tactical Wargame &copy;2025 JDD</p>
+        </footer>
+    </div>
+
+    <script>
+        function openTab(tabId, btnElement) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('border-b-4');
+            });
+
+            const activeContent = document.getElementById(tabId);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('active');
+            
+            btnElement.classList.add('active');
+            btnElement.classList.remove('border-b-4');
+        }
+    </script>
+</body>
+</html>
