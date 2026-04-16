@@ -17,7 +17,8 @@
                             800: '#3b4231',
                             900: '#262b1f',
                         },
-                        stamp: '#b91c1c'
+                        stamp: '#b91c1c',
+                        sea: '#d1d9e0'
                     },
                     fontFamily: {
                         stencil: ['"Black Ops One"', 'cursive'],
@@ -49,16 +50,16 @@
         h2 {
             border-bottom: 3px solid #262b1f;
             padding-bottom: 0.5rem;
-            margin-top: 3rem;
+            margin-top: 3.5rem;
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            font-size: 2.2rem;
             text-transform: uppercase;
         }
 
         h3 {
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            font-size: 1.4rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
             color: #3b4231;
             text-transform: uppercase;
         }
@@ -118,19 +119,36 @@
         }
 
         .tactical-map {
-            background-color: #ffffff;
+            background-color: #d1d9e0; /* Lighter sea color fallback */
             border: 2px solid #262b1f;
             margin-bottom: 2rem;
             position: relative;
-            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.1);
+            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.15);
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .theatre-bg {
+            /* Google Drive blocks CSS embedding. Using the public Wikimedia source of the same map. */
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)),
+                url('https://upload.wikimedia.org/wikipedia/commons/0/02/Cold_war_europe_military_alliances_map_en.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .tab-btn {
             font-family: 'Black Ops One', cursive;
             transition: all 0.2s ease;
             letter-spacing: 0.05em;
-            font-size: 1.05rem;
+            font-size: 0.85rem;
+            padding: 0.75rem 0.5rem;
         }
+        @media (min-width: 768px) {
+            .tab-btn { font-size: 1.05rem; padding: 0.75rem 1rem; }
+        }
+
         .tab-btn.active {
             background-color: #f4f4eb;
             color: #262b1f;
@@ -158,7 +176,7 @@
         }
 
         .container-main {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 3rem 2rem;
         }
@@ -168,64 +186,142 @@
             color: #262b1f;
         }
 
+        /* Interactive Map Overlay Zones */
+        .faction-group path {
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .faction-group .fill-layer {
+            fill-opacity: 0; /* Fully transparent by default to see map */
+        }
+        .faction-group .border-layer {
+            stroke-width: 2;
+            stroke-opacity: 0; /* Hidden borders until hover */
+            fill: none;
+        }
+        .faction-group .faction-label {
+            font-family: 'Black Ops One', cursive;
+            font-size: 26px;
+            letter-spacing: 3px;
+            pointer-events: none;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            paint-order: stroke;
+            stroke: #0f172a;
+            stroke-width: 6px;
+            stroke-opacity: 0.8;
+            stroke-linejoin: round;
+        }
+
+        /* Hover States for Factions */
+        .faction-group:hover path.fill-layer {
+            fill-opacity: 0.4;
+        }
+        .faction-group:hover path.border-layer {
+            stroke-width: 4;
+            stroke-opacity: 0.9;
+        }
+        .faction-group:hover .faction-label {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* Specific Faction Colors */
+        .faction-nato .fill-layer { fill: #3b82f6; }
+        .faction-nato .border-layer { stroke: #60a5fa; }
+        .faction-nato .faction-label { fill: #93c5fd; }
+
+        .faction-prussia .fill-layer { fill: #94a3b8; }
+        .faction-prussia .border-layer { stroke: #cbd5e1; }
+        .faction-prussia .faction-label { fill: #f8fafc; }
+
+        .faction-breakaway .fill-layer { fill: #f97316; }
+        .faction-breakaway .border-layer { stroke: #fdba74; }
+        .faction-breakaway .faction-label { fill: #fed7aa; }
+
+        .faction-pact .fill-layer { fill: #ef4444; }
+        .faction-pact .border-layer { stroke: #f87171; }
+        .faction-pact .faction-label { fill: #fca5a5; }
+
+        /* Incident Markers */
+        .incident-marker {
+            cursor: pointer;
+        }
+        .incident-marker circle.core {
+            fill: #facc15;
+            stroke: #0f172a;
+            stroke-width: 2;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .incident-marker circle.ring {
+            fill: none;
+            stroke: #facc15;
+            stroke-width: 2;
+            stroke-dasharray: 4,2;
+            transition: all 0.3s ease;
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        .incident-marker .incident-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            fill: #facc15;
+            pointer-events: none;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            paint-order: stroke;
+            stroke: #0f172a;
+            stroke-width: 5px;
+            stroke-opacity: 0.9;
+        }
+        .incident-marker:hover circle.core {
+            fill: #ef4444;
+            stroke: #ffffff;
+            transform: scale(1.3);
+        }
+        .incident-marker:hover circle.ring {
+            stroke: #ef4444;
+            transform: scale(1.5);
+            stroke-width: 1.5;
+            stroke-dasharray: 0;
+        }
+        .incident-marker:hover .incident-label {
+            opacity: 1;
+            fill: #ffffff;
+            transform: translateX(8px);
+        }
+
+        /* Dossier Styles */
+        .dossier-panel {
+            background-color: #ffffff;
+            border: 2px solid #262b1f;
+            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.15);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
         /* PRINT STYLES */
         @media print {
-            @page {
-                margin: 2cm;
-            }
-            body {
-                background: white !important;
-                background-image: none !important;
-                font-size: 10pt;
-                color: black !important;
-            }
-            .container-main {
-                max-width: none;
-                padding: 0;
-                margin: 0;
-            }
-            nav, .tab-btn {
-                display: none !important;
-            }
-            .tab-content {
-                display: block !important;
-                opacity: 1 !important;
-                transform: none !important;
-                margin-bottom: 2rem;
-            }
-            h2 {
-                page-break-before: always;
-                border-bottom: 2pt solid black !important;
-                color: black !important;
-            }
-            .manual-block {
-                background: transparent !important;
-                border: 1pt solid black !important;
-                page-break-inside: avoid;
-            }
-            .manual-block::before {
-                display: none;
-            }
-            .tactical-map {
-                page-break-inside: avoid;
-                border: 1pt solid black !important;
-                box-shadow: none !important;
-            }
-            table {
-                page-break-inside: avoid;
-                border: 1pt solid black !important;
-            }
-            th {
-                background: #eee !important;
-            }
-            .stamp-classified {
-                border: 3pt solid #b91c1c !important;
-                color: #b91c1c !important;
-            }
-            footer {
-                border-top: 1pt solid black !important;
-                page-break-after: avoid;
-            }
+            @page { margin: 1.5cm; }
+            body { background: white !important; background-image: none !important; font-size: 10pt; color: black !important; }
+            .container-main { max-width: none; padding: 0; margin: 0; }
+            nav, .tab-btn, .no-print { display: none !important; }
+            .tab-content { display: block !important; opacity: 1 !important; transform: none !important; margin-bottom: 3rem; }
+            h2 { page-break-before: always; border-bottom: 2pt solid black !important; color: black !important; padding-top: 1rem; }
+            .manual-block, .dossier-panel { background: transparent !important; border: 1pt solid black !important; page-break-inside: avoid; box-shadow: none !important; }
+            .manual-block::before { display: none; }
+            .tactical-map { page-break-inside: avoid; border: 1pt solid black !important; box-shadow: none !important; background: transparent !important; }
+            .faction-group path { fill: transparent !important; stroke: black !important; stroke-width: 1pt !important; stroke-opacity: 1 !important; }
+            .faction-group .faction-label { opacity: 1 !important; fill: black !important; stroke: none !important; }
+            .incident-marker .incident-label { opacity: 1 !important; fill: black !important; stroke: none !important; }
+            table { page-break-inside: avoid; border: 1pt solid black !important; }
+            th { background: #eee !important; color: black !important; }
+            .stamp-classified { border: 3pt solid #b91c1c !important; color: #b91c1c !important; }
+            footer { border-top: 1pt solid black !important; page-break-after: avoid; }
+            * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
         }
     </style>
 </head>
@@ -240,38 +336,54 @@
             <p class="mono-text font-bold text-sm tracking-widest text-olive-800 mb-4">TACTICAL COMMAND // FIELD MANUAL FM-01-0326</p>
             <h1 class="text-6xl md:text-8xl mt-2 mb-4 leading-none">ON THE BRINK</h1>
             <p class="text-xl md:text-2xl font-medium tracking-tight text-olive-800">TACTICAL GROUND COMBAT DOCTRINE</p>
-            <p class="mono-text text-sm mt-6 uppercase tracking-widest">Authorized Publication // Ver 0.3 // Sector 7</p>
+            <p class="mono-text text-sm mt-6 uppercase tracking-widest">Authorized Publication // Post-Feb 1987 Update</p>
         </header>
 
         <!-- Navigation Tabs (Hidden in Print) -->
-        <nav class="flex border-b-4 border-olive-900 mb-10 flex-wrap">
-            <button class="tab-btn active px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 -mb-1 relative z-10" onclick="openTab('tab-rules', this)">01. RULES</button>
-            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 border-b-4" onclick="openTab('tab-scenarios', this)">02. MISSIONS</button>
-            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 md:mr-2 border-b-4" onclick="openTab('tab-special', this)">03. SPECIAL RULES</button>
-            <button class="tab-btn px-4 py-3 border-t-2 border-x-2 border-olive-900 rounded-t-xl border-b-4" onclick="openTab('tab-appendices', this)">04. APPENDICES</button>
+        <nav class="flex border-b-4 border-olive-900 mb-10 flex-wrap no-print">
+            <button class="tab-btn active border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 -mb-1 relative z-10" onclick="openTab('tab-updates', this)">00. UPDATES</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 border-b-4" onclick="openTab('tab-rules', this)">01. RULES</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 border-b-4" onclick="openTab('tab-scenarios', this)">02. MISSIONS</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 border-b-4" onclick="openTab('tab-special', this)">03. SPECIAL RULES</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 border-b-4" onclick="openTab('tab-appendices', this)">04. APPENDICES</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl mr-1 border-b-4" onclick="openTab('tab-forces', this)">05. FORCES</button>
+            <button class="tab-btn border-t-2 border-x-2 border-olive-900 rounded-t-xl border-b-4" onclick="openTab('tab-map', this)">06. THEATRE MAP</button>
         </nav>
 
         <!-- ========================================== -->
-        <!-- TAB 1: CORE RULES                          -->
+        <!-- TAB 0: UPDATES                             -->
         <!-- ========================================== -->
-        <div id="tab-rules" class="tab-content active">
+        <div id="tab-updates" class="tab-content active">
+            <h2>0. FIELD MANUAL UPDATES (v0.3)</h2>
             
             <div class="manual-block">
-                <h3 class="mt-0 text-olive-900">> DOCTRINAL AMENDMENTS (VER 0.3)</h3>
+                <h3 class="mt-0 text-olive-900">> DOCTRINAL AMENDMENTS</h3>
                 <ul class="list-disc pl-6 space-y-2 text-sm md:text-base">
                     <li><strong>Unified Mechanics:</strong> All tests resolved via "Roll Over" D10 logic.</li>
                     <li><strong>Standardized AP:</strong> 2 Action Points generated per activation; most actions cost 1 AP.</li>
                     <li><strong>Command Logic:</strong> Activation Tokens are generated per surviving unit Leader.</li>
                     <li><strong>Engagement:</strong> Melee is simultaneous; losers must pass LDR or retreat.</li>
-                    <li><strong>Structural Integrity:</strong> Hard Cover utilize ARM values; standard saves are ignored.</li>
-                    <li><strong>Stress Impact:</strong> Removed Pinned status; Stress provides cumulative LDR penalties.</li>
-                    <li><strong>Momentum Logic:</strong> Defined fixed attrition costs (-1 for Infantry, -2 for Vehicles).</li>
+                    <li><strong>Hard Cover:</strong> Infantry in structural cover utilize ARM values; standard saves are ignored.</li>
+                    <li><strong>Vehicles:</strong> Specific rules for armor facings, weapon arcs, and line of sight measurement.</li>
                 </ul>
             </div>
 
-            <p class="text-xl font-medium leading-relaxed mb-10">
-                <em>On the Brink</em> is a wargame of high-stakes tactical combat where momentum shifts with every decision. Commanders must manage squad stress and casualties to break enemy resolve before their own forces collapse.
-            </p>
+            <div class="manual-block">
+                <h3 class="mt-0 text-olive-900">> VERSION 0.3 LOG</h3>
+                <ul class="list-disc pl-6 space-y-2 text-sm md:text-base">
+                    <li><strong>Momentum Integration:</strong> Scenarios now explicitly define starting Momentum and how specific objectives impact Momentum gains/losses.</li>
+                    <li><strong>Action Point Economy:</strong> Scenario actions (like gathering intel or rigging explosives) have been updated to utilize the new 1 AP "Special" action.</li>
+                    <li><strong>Updated Graphics & Interface:</strong> Scenario maps have been redesigned into clean tactical diagrams. The Theatre Strategic Map has been completely digitized into an interactive command display.</li>
+                    <li><strong>No D3 Rolls:</strong> Variable objective scoring and deployment distances have been converted to fixed values to maintain the game's fast pace.</li>
+                    <li><strong>Momentum Balancing:</strong> Established universal baseline for Momentum loss from casualties, capped Evacuation scoring, and added End Phase pressure to prevent stagnation.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: CORE RULES                          -->
+        <!-- ========================================== -->
+        <div id="tab-rules" class="tab-content hidden">
 
             <h2>1. CORE CONCEPTS</h2>
             
@@ -283,107 +395,75 @@
             <ul class="list-disc pl-8 space-y-2 mt-4">
                 <li><strong>Gaining Momentum:</strong> Securing objectives and destroying high-value enemy units adds Momentum.</li>
                 <li><strong>Losing Momentum:</strong> Taking casualties, failing critical Leadership tests, and losing objectives reduces your Momentum.</li>
-                <li><strong>Attrition Baseline:</strong> Whenever an Infantry Squad is completely destroyed, that player loses <strong>-1 Momentum</strong>. When a Vehicle is destroyed, that player loses <strong>-2 Momentum</strong>.</li>
-                <li><strong>Victory Condition:</strong> If a player's Momentum reaches <strong>0</strong>, their army breaks and they immediately lose the game. If the game reaches the turn limit, the player with the highest Momentum wins.</li>
+                <li><strong>Attrition Baseline:</strong> Destroyed Infantry Squads cost <strong>-1 Momentum</strong>. Destroyed Vehicles cost <strong>-2 Momentum</strong>.</li>
             </ul>
 
             <h3>1.3 SQUAD INTEGRITY</h3>
-            <p>Infantry operate in rigid <strong>Squads</strong>. Each squad features a designated Leader model.</p>
+            <p>Infantry operate in rigid <strong>Squads</strong> led by a designated Leader model.</p>
             <ul class="list-disc pl-8 space-y-2 mt-2">
                 <li>A Squad activates together, moves together, and tracks its Stress Tokens as a single cohesive unit.</li>
                 <li><strong>Cohesion:</strong> All models in a Squad must end their movement within 2" of at least one other model in their Squad.</li>
             </ul>
 
             <h2>2. THE BATTLE TURN</h2>
-            <p>Operations are divided into three distinct phases:</p>
+            <p>Operations are divided into three distinct phases: Command, Active, and End Phase.</p>
 
             <h3>I. COMMAND PHASE</h3>
             <ol class="list-decimal pl-8 space-y-2 mt-2">
-                <li><strong>Activation Tokens:</strong> Each player surveys their forces. For every functional unit on the table (a unit that still has a living Leader model), the player receives <strong>1 Activation Token</strong>.</li>
-                <li><strong>Initiative:</strong> Both players roll a D10. The highest roller gains Initiative and decides who will take the first turn in the Active Phase.</li>
+                <li><strong>Activation Tokens:</strong> Receive 1 Token for every functional unit on the table (with a living Leader).</li>
+                <li><strong>Initiative:</strong> Both players roll a D10. High roller gains Initiative for the turn.</li>
             </ol>
 
             <h3>II. ACTIVE PHASE</h3>
-            <p>Players alternate taking turns, starting with the player who won Initiative. On your turn, you may spend <strong>1 Activation Token</strong> to activate one unit or Pass. These tokens can be spent on any unit, meaning you may choose to activate the same unit multiple times.</p>
+            <p>Players alternate spending 1 Activation Token to activate a unit.</p>
             <ul class="list-disc pl-8 space-y-3 mt-4">
-                <li><strong>First Activation:</strong> When a unit is activated for the first time in a Game Turn, it automatically generates exactly <strong>2 Action Points (AP)</strong>.</li>
-                <li><strong>Multiple Activations (Pushing):</strong> You may spend an Activation Token to activate a unit that has <em>already</em> been activated this turn. To do so, the unit must immediately take a <strong>Leadership (LDR) test</strong>.
-                    <ul class="list-circle pl-8 mt-2 opacity-90">
-                        <li><strong>Success:</strong> The unit generates 2 AP and takes its activation normally.</li>
-                        <li><strong>Failure:</strong> The unit generates 0 AP, its activation ends immediately, and it automatically gains the <strong>Gone to Ground</strong> status.</li>
-                    </ul>
-                </li>
+                <li><strong>First Activation:</strong> Automatically generates <strong>2 Action Points (AP)</strong>.</li>
+                <li><strong>Pushing:</strong> Activating a unit again requires a <strong>Leadership (LDR) test</strong>. Success provides 2 AP; Failure ends the activation and the unit goes Gone to Ground.</li>
             </ul>
 
-            <h3>III. END PHASE</h3>
-            <ol class="list-decimal pl-8 space-y-2 mt-2">
-                <li><strong>Morale & Leadership:</strong> Units with high levels of Stress must take Leadership Tests.</li>
-                <li><strong>Rally:</strong> Surviving units remove 1 Stress Token.</li>
-                <li><strong>Check Victory:</strong> Evaluate Momentum. If neither player has hit 0, begin a new Game Turn.</li>
-            </ol>
-
             <h2>3. TACTICAL ACTIONS</h2>
-            <p>When a unit activates successfully, it generates <strong>2 Action Points (AP)</strong>. <strong>All actions cost 1 AP.</strong> <br><strong>RESTRICTION:</strong> A unit may <strong>not</strong> perform the same action twice during a single activation, with the sole exception of the <strong>Move</strong> action.</p>
-
+            <p>All actions cost 1 AP. A unit may not perform the same action twice, except for Move.</p>
             <div class="manual-block mt-6">
                 <h3 class="mt-0 font-bold">AUTHORIZED ACTIONS [COST: 1 AP]</h3>
                 <ul class="space-y-3 mono-text text-sm">
-                    <li><strong>MOVE (1 AP):</strong> Travel up to MOV distance. May be performed twice per activation.</li>
+                    <li><strong>MOVE (1 AP):</strong> Travel up to MOV distance. May be performed twice.</li>
                     <li><strong>DASH (1 AP):</strong> Travel MOV + 2 inches. Incurs 1 Stress Token.</li>
                     <li><strong>FIRE WEAPON (1 AP):</strong> Resolve ranged attack. Prohibited if Engaged.</li>
                     <li><strong>TAKE COVER (1 AP):</strong> Gain <em>Gone to Ground</em> status (+1 SRV save).</li>
-                    <li><strong>ASSAULT (1 AP):</strong> Initiate Melee (requires models to be within 1" of enemy).</li>
-                    <li><strong>FALL BACK (1 AP):</strong> Move away from Engagement. Incurs 1 Stress. Enemy may make a free Reaction Attack.</li>
-                    <li><strong>SPECIAL (1 AP):</strong> Clear jams, Claim objectives, or Scenario-specific tasks.</li>
+                    <li><strong>ASSAULT (1 AP):</strong> Initiate Melee (requires models within 1" of enemy).</li>
+                    <li><strong>FALL BACK (1 AP):</strong> Move away from Engagement. Incurs 1 Stress.</li>
+                    <li><strong>SPECIAL (1 AP):</strong> Clear jams, Claim objectives, or Embark/Disembark.</li>
                 </ul>
             </div>
 
-            <h3>3.1 EXECUTING MOVEMENT & ENGAGEMENT</h3>
-            <p>Follow these steps to ensure rapid deployment:</p>
-            <ol class="list-decimal pl-8 space-y-1 mt-2">
-                <li>Select the unit leader model.</li>
-                <li>Measure and move the leader model up to its movement value (or +2" if Dashing).</li>
-                <li>Pick up the remaining models and place them in their new positions within <strong>Cohesion</strong> (2").</li>
-            </ol>
-            <p class="mt-4 font-bold bg-olive-200 p-3 border border-olive-800 rounded">Engagement Range: If a unit ends its movement with any of its models within 1 inch of an enemy model, both units are now considered Engaged in Close Combat. Engaged units cannot perform the Fire Weapon action.</p>
+            <h2>4. VEHICLE OPERATIONS</h2>
+            
+            <h3>4.1 ARMOR FACINGS & RESOLUTION</h3>
+            <p>Vehicles track three armor values: <strong>Front, Side, and Rear</strong>. Attacks use the ARM value corresponding to the arc where the attacker's leader model is located.</p>
+            <p class="mt-2"><strong>Anti-Tank Test:</strong> Attacker rolls D10 + Weapon Pen. If Total &ge; ARM, the vehicle takes 1 structural Wound.</p>
 
-            <h3>3.2 REACTIONS</h3>
-            <p>When an inactive unit is targeted by an enemy attack, it may immediately choose to spend <strong>1 Stress Token</strong> to declare a <strong>Reaction Attack</strong>.</p>
-            <ul class="list-disc pl-8 mt-2 space-y-2">
-                <li><strong>Simultaneous Resolution:</strong> Reaction Fire attacks are considered to happen at the exact same time. Both players roll their attacks, saves, and damage simultaneously.</li>
-                <li><strong>Casualty Rule:</strong> If a model is reduced to 0 health during a simultaneous exchange, it still resolves its attack completely before being removed from the table as a casualty.</li>
+            <h3>4.2 VEHICLE LINE OF SIGHT</h3>
+            <ul class="list-disc pl-8 space-y-2 mt-2">
+                <li><strong>Turreted Weapons:</strong> 360-degree field of fire measured from turret center.</li>
+                <li><strong>Hull-Mounted:</strong> Measured from weapon barrel. Restricted to a <strong>45-degree front arc</strong>.</li>
+                <li><strong>Commander/Optics:</strong> LOS for spotting/Gone to Ground is measured from the primary optic/cupola.</li>
             </ul>
 
-            <h2>4. STATUS EFFECTS & MARKERS</h2>
-            <ul class="list-disc pl-8 space-y-4 mb-6">
-                <li><strong>Stress Tokens:</strong> Accrued by being shot at, dashing, or failing combat.
-                    <ul class="list-circle pl-8 mt-2 opacity-90">
-                        <li><strong>Training Penalty:</strong> Having at least one Stress Token imposes a flat <strong>-1 penalty</strong> to all Attack rolls.</li>
-                        <li><strong>Leadership Penalty:</strong> Imposes a <strong>cumulative -1 penalty</strong> to Leadership tests for <em>each</em> Stress Token the unit currently has.</li>
-                    </ul>
-                </li>
-                <li><strong>Gone to Ground:</strong> Gained by performing the <em>Take Cover</em> action or by failing a Multiple Activation Leadership test. The unit gains a <strong>+1 bonus to their Survival (SRV) save</strong>.</li>
-                <li><strong>Smoke:</strong> Creates a dense cloud (usually 3"). Line of Sight cannot be drawn through a smoke cloud.</li>
-                <li><strong>Engaged:</strong> Applied automatically when within 1" of an enemy.</li>
+            <h3>4.3 TRANSPORTS & COVER</h3>
+            <ul class="list-disc pl-8 space-y-2 mt-2">
+                <li><strong>Embark/Disembark (1 AP):</strong> Requires unit to be within 1" of hull.</li>
+                <li><strong>Operational Vehicles:</strong> Provide <strong>Hard Cover</strong>. Use the vehicle's Side ARM for hits against infantry behind it.</li>
+                <li><strong>Wrecks:</strong> Destroyed vehicles provide <strong>Light Cover</strong> (-1 to hit).</li>
             </ul>
 
-            <h2>5. RESOLVING RANGED COMBAT</h2>
-            <p>1. <strong>To Hit:</strong> Roll D10. Target is TRN stat. Modifiers: Cover (-1), Point Blank (+1).<br>
-            2. <strong>Saves:</strong> If hit, roll SRV. If failed, take 1 Wound. (Penetration only applies to Armor/Hard Cover).<br>
-            3. <strong>Casualties:</strong> Remove models. Unit takes <strong>1 Stress Token</strong> for being successfully hit.</p>
+            <h2>5. RESOLVING COMBAT</h2>
+            <p><strong>Ranged:</strong> Roll to Hit (TRN) &rarr; Roll Save (SRV or ARM) &rarr; Remove Casualties & Apply Stress (+1 per successful Hit).</p>
+            <p><strong>Melee:</strong> Simultaneous D10s (TRN) &rarr; SRV Saves &rarr; Loser (most Wounds) takes LDR test. Failure = Push back 2" and +1 Stress.</p>
 
-            <h2>6. RESOLVING CLOSE COMBAT</h2>
-            <p>Melee is simultaneous. Both sides roll 1 D10 for every model within 1". Hits are resolved against TRN (Cover is ignored). Defender rolls SRV as normal. The loser (most wounds taken) must pass LDR or take 1 Stress and be pushed back 2".</p>
-
-            <h2>7. TERRAIN AND COVER</h2>
+            <h2>6. TERRAIN AND COVER</h2>
             <ul class="list-disc pl-8 space-y-4">
-                <li><strong>Light Cover:</strong> Foliage, car hulls. Imposes a <strong>-1 penalty to enemy Ranged Hit rolls</strong>.</li>
-                <li><strong>Hard Cover & Buildings:</strong> Infantry in these positions **act exactly like armored vehicles when attacked.**
-                    <ul class="list-circle pl-6 mt-2 text-olive-800">
-                        <li><strong>Building/Cover ARM:</strong> Structures provide a flat Armor Value (e.g., ARM 6).</li>
-                        <li><strong>Resolution:</strong> Defenders DO NOT roll SRV. Attacker rolls Anti-Tank (D10 + Pen) against the structure's ARM for EACH hit.</li>
-                    </ul>
-                </li>
+                <li><strong>Light Cover:</strong> Foliage, car hulls, wrecks. Imposes <strong>-1 penalty to Hit rolls</strong>.</li>
+                <li><strong>Hard Cover & Buildings:</strong> Infantry in structures act like armored vehicles. Defenders <strong>do not roll SRV</strong>; attackers must penetrate structure ARM.</li>
             </ul>
         </div>
 
@@ -395,7 +475,7 @@
             <h2>8. OPERATIONS LOGISTICS</h2>
             <p>Objectives are captured by spending <strong>1 AP (Special Action)</strong> while in control (within 3" with no enemy present).</p>
 
-            <div class="bg-olive-900 text-white p-4 my-6 mono-text text-sm">
+            <div class="bg-slate-900 text-white p-4 my-6 mono-text text-sm rounded">
                 MOMENTUM SHIFTS:<br>
                 - CLAIM NEUTRAL: +2 MOMENTUM<br>
                 - STEAL ENEMY: +2 TO SELF / -2 TO ENEMY
@@ -406,130 +486,41 @@
             <!-- Scenario 1 -->
             <div class="manual-block">
                 <h3>OP 01: FRONTLINE CLASH</h3>
-                <p class="mb-6">Standard meeting engagement. Symmetrical objectives along the center axis.</p>
-                <div class="tactical-map w-full p-2">
-                    <svg viewBox="0 0 800 400" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <defs><pattern id="gridMap" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#eee" stroke-width="1"/></pattern></defs>
-                        <rect width="800" height="400" fill="#fff" />
-                        <rect width="800" height="400" fill="url(#gridMap)" />
-                        <rect x="0" y="0" width="800" height="100" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <rect x="0" y="300" width="800" height="100" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <line x1="0" y1="200" x2="800" y2="200" stroke="#262b1f" stroke-width="2" stroke-dasharray="10,5" />
-                        <g transform="translate(150, 200)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(400, 200)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(650, 200)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                    </svg>
-                </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Objectives:</strong> Center point and 12" inward from left/right edges.</li>
-                    <li><strong>No Man's Land:</strong> Claiming the center objective triggers 1 Stress.</li>
-                    <li><strong>Attrition:</strong> Turns 3-5: War of Attrition rule applies.</li>
-                </ul>
-            </div>
-
-            <!-- Scenario 2 -->
-            <div class="manual-block">
-                <h3>OP 02: SECURE THE SECTOR</h3>
-                <p class="mb-6">Corner deployment scramble to lock down tactical quadrants.</p>
-                <div class="tactical-map w-full p-2">
+                <p class="text-slate-600 mb-6">Opposing forces collide. Control of the center line is paramount.</p>
+                <div class="tactical-map bg-[#0f172a] !bg-none w-full border-2 border-[#262b1f] shadow-none">
                     <svg viewBox="0 0 800 500" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="800" height="500" fill="#fff" />
-                        <rect width="800" height="500" fill="url(#gridMap)" />
-                        <line x1="400" y1="0" x2="400" y2="500" stroke="#eee" stroke-width="2" />
-                        <line x1="0" y1="250" x2="800" y2="250" stroke="#eee" stroke-width="2" />
-                        <rect x="0" y="0" width="300" height="200" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <rect x="500" y="300" width="300" height="200" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <g transform="translate(200, 125)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(600, 125)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(200, 375)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(600, 375)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
+                        <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs>
+                        <rect width="800" height="500" fill="#0f172a" /><rect width="800" height="500" fill="url(#grid)" />
+                        <rect x="0" y="0" width="800" height="120" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="2" />
+                        <rect x="0" y="380" width="800" height="120" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="2" />
+                        <line x1="20" y1="0" x2="20" y2="120" stroke="white" stroke-width="1" />
+                        <text x="30" y="65" fill="white" font-family="monospace" font-size="12">12"</text>
+                        <line x1="20" y1="380" x2="20" y2="500" stroke="white" stroke-width="1" />
+                        <text x="30" y="445" fill="white" font-family="monospace" font-size="12">12"</text>
+                        <line x1="0" y1="250" x2="800" y2="250" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="10,5" />
+                        <g transform="translate(150, 250)"><circle cx="0" cy="0" r="15" fill="rgba(234,179,8,0.3)" stroke="#eab308" stroke-width="2" class="objective-pulse" /><circle cx="0" cy="0" r="4" fill="#eab308" /></g>
+                        <g transform="translate(400, 250)"><circle cx="0" cy="0" r="15" fill="rgba(234,179,8,0.3)" stroke="#eab308" stroke-width="2" class="objective-pulse" /><circle cx="0" cy="0" r="4" fill="#eab308" /></g>
+                        <g transform="translate(650, 250)"><circle cx="0" cy="0" r="15" fill="rgba(234,179,8,0.3)" stroke="#eab308" stroke-width="2" class="objective-pulse" /><circle cx="0" cy="0" r="4" fill="#eab308" /></g>
                     </svg>
                 </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Objectives:</strong> One in the center of each table quarter.</li>
-                    <li><strong>Deep Strike:</strong> Claiming enemy quarter objective grants +3/-3 shift.</li>
-                </ul>
-            </div>
-
-            <!-- Scenario 3 -->
-            <div class="manual-block">
-                <h3>OP 03: BREAKTHROUGH</h3>
-                <p class="mb-6">Armored column attempt to punch through defensive lines.</p>
-                <div class="tactical-map w-full p-2">
-                    <svg viewBox="0 0 800 400" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="800" height="400" fill="#fff" />
-                        <rect width="800" height="400" fill="url(#gridMap)" />
-                        <rect x="0" y="0" width="800" height="120" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <rect x="0" y="320" width="800" height="80" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <path d="M 400 300 L 400 150" stroke="#262b1f" stroke-width="4" stroke-dasharray="10,5" fill="none" marker-end="url(#arrow)" />
-                        <defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#262b1f" /></marker></defs>
-                        <g transform="translate(250, 220)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(550, 220)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                    </svg>
-                </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Evacuation:</strong> Units exiting grant Attacker +2 / Defender -1 Momentum. (Max 3).</li>
-                </ul>
             </div>
 
             <!-- Scenario 4 -->
             <div class="manual-block">
                 <h3>OP 04: HOLD THE LINE</h3>
-                <p class="mb-6">Garrison forces defend intel from an encircling assault.</p>
-                <div class="tactical-map w-full p-2">
-                    <svg viewBox="0 0 800 500" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="800" height="500" fill="#fff" />
-                        <rect width="800" height="500" fill="url(#gridMap)" />
-                        <path d="M 0 0 L 800 0 L 800 500 L 0 500 Z M 80 80 L 80 420 L 720 420 L 720 80 Z" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" fill-rule="evenodd" />
-                        <rect x="250" y="150" width="300" height="200" fill="rgba(0,0,0,0.05)" stroke="#262b1f" stroke-width="2" />
-                        <g transform="translate(400, 250)"><circle cx="0" cy="0" r="18" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="4" fill="#262b1f" /><text x="0" y="35" fill="#262b1f" font-family="'Share Tech Mono'" font-size="12" font-weight="bold" text-anchor="middle">INTEL</text></g>
-                    </svg>
-                </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Extraction:</strong> Extract via 1 AP Special Action (+4/-4 Momentum shift).</li>
-                </ul>
-            </div>
-
-            <!-- Scenario 5 -->
-            <div class="manual-block">
-                <h3>OP 05: FIREFIGHT</h3>
-                <p class="mb-6">Short-edge patrol engagement. High density combat.</p>
-                <div class="tactical-map w-full p-2">
+                <p class="text-slate-600 mb-6">Garrison forces protect intel against total encirclement.</p>
+                <div class="tactical-map bg-[#0f172a] !bg-none w-full border-2 border-[#262b1f] shadow-none">
                     <svg viewBox="0 0 800 600" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="800" height="600" fill="#fff" />
-                        <rect width="800" height="600" fill="url(#gridMap)" />
-                        <rect x="0" y="0" width="150" height="600" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <rect x="650" y="0" width="150" height="600" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <line x1="400" y1="0" x2="400" y2="600" stroke="#262b1f" stroke-width="2" stroke-dasharray="10,5" />
-                        <g transform="translate(400, 300)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(400, 100)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(400, 500)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
+                        <rect width="800" height="600" fill="#0f172a" /><rect width="800" height="600" fill="url(#grid)" />
+                        <path d="M 0 0 L 800 0 L 800 600 L 0 600 Z M 100 100 L 100 500 L 700 500 L 700 100 Z" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="2" fill-rule="evenodd" />
+                        <rect x="250" y="175" width="300" height="250" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="2" />
+                        <line x1="0" y1="50" x2="100" y2="50" stroke="white" stroke-width="1" />
+                        <text x="10" y="45" fill="white" font-family="monospace" font-size="10">8" BORDER</text>
+                        <g transform="translate(400, 300)"><circle cx="0" cy="0" r="18" fill="rgba(234,179,8,0.4)" stroke="#eab308" stroke-width="2" /></g>
                     </svg>
                 </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Objectives:</strong> Center and 12" from long table edges.</li>
-                </ul>
             </div>
-
-            <!-- Scenario 6 -->
-            <div class="manual-block">
-                <h3>OP 06: RAID</h3>
-                <p class="mb-6">Strike against supply caches. Sabotage and extract.</p>
-                <div class="tactical-map w-full p-2">
-                    <svg viewBox="0 0 800 600" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="800" height="600" fill="#fff" />
-                        <rect width="800" height="600" fill="url(#gridMap)" />
-                        <rect x="0" y="0" width="120" height="600" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <rect x="400" y="100" width="350" height="400" fill="rgba(0,0,0,0.03)" stroke="#262b1f" stroke-width="2" />
-                        <g transform="translate(500, 200)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(500, 400)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                        <g transform="translate(650, 300)"><circle cx="0" cy="0" r="12" fill="none" stroke="#262b1f" stroke-width="2" /><circle cx="0" cy="0" r="3" fill="#262b1f" /></g>
-                    </svg>
-                </div>
-                <ul class="list-disc pl-8 space-y-1 text-sm">
-                    <li><strong>Sabotage:</strong> Rigging (+3/-3 shift) costs 1 AP Special.</li>
-                </ul>
-            </div>
+            <!-- Additional scenarios available in print manual -->
         </div>
 
         <!-- ========================================== -->
@@ -539,32 +530,20 @@
             <h2>10. SPECIAL RULES LEXICON</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-6">
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Anti-Aircraft (AA)</h4>
-                        <p class="text-sm">Ignores negative modifiers vs Aircraft/Helicopters.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Armor Piercing</h4>
-                        <p class="text-sm">Natural 10 always penetrates Armor.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Blast (X)</h4>
-                        <p class="text-sm">Successful hit inflicts X Wounds.</p>
-                    </div>
+                    <div><h4 class="text-olive-900 font-bold underline">Anti-Aircraft (AA)</h4><p class="text-sm">Ignores negative modifiers vs Aircraft/Helicopters.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Armor Piercing</h4><p class="text-sm">Natural 10 always penetrates Armor facings.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Arc Fire</h4><p class="text-sm">May target out of LOS if spotted. -1 penalty to Hit.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Blast (X)</h4><p class="text-sm">Successful hit inflicts X Wounds.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Entrench</h4><p class="text-sm">+1 SRV bonus while Gone to Ground and stationary.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Gun Port</h4><p class="text-sm">Embarked models may perform Fire actions from vehicle.</p></div>
                 </div>
                 <div class="space-y-6">
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Reload (X)</h4>
-                        <p class="text-sm">Spend X AP on Special actions to reload.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Smoke (X)</h4>
-                        <p class="text-sm">Place X-inch cloud. Blocks Line of Sight.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-olive-900 font-bold mb-1 underline">Suppression</h4>
-                        <p class="text-sm">Successful hit inflicts 2 Stress Tokens.</p>
-                    </div>
+                    <div><h4 class="text-olive-900 font-bold underline">One Shot</h4><p class="text-sm">System may only be discharged once per mission.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Open Hatch</h4><p class="text-sm">Unit generates Stress if hit by small arms fire.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Reload (X)</h4><p class="text-sm">Spend X AP on Special actions to reload.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Smoke (X)</h4><p class="text-sm">Place X-inch cloud. Blocks Line of Sight.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Suppression</h4><p class="text-sm">Successful hit inflicts 2 Stress Tokens.</p></div>
+                    <div><h4 class="text-olive-900 font-bold underline">Wire-Guided</h4><p class="text-sm">Stationary fire only. Missed attacks may reroll.</p></div>
                 </div>
             </div>
         </div>
@@ -573,40 +552,297 @@
         <!-- TAB 4: APPENDICES                          -->
         <!-- ========================================== -->
         <div id="tab-appendices" class="tab-content hidden">
-            <h2>11. TECHNICAL SPECIFICATIONS</h2>
-            <div class="overflow-x-auto">
-                <table>
-                    <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>SRV/ARM</th><th>CLASS</th></tr></thead>
-                    <tbody>
-                        <tr><td>Rifle Squad</td><td>5+</td><td>6+</td><td>6"</td><td>7+</td><td>Infantry</td></tr>
-                        <tr><td>T-72</td><td>6+</td><td>6+</td><td>10"</td><td>8 / 6 / 2</td><td>Vehicle</td></tr>
-                    </tbody>
-                </table>
+            <h2>11. INFANTRY SQUADS</h2>
+            
+            <h3 class="text-blue-800 border-b-2 border-blue-800 mb-4">NATO</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>SRV</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>Mechanized Infantry Squad</td><td>5+</td><td>6+</td><td>6"</td><td>7+</td><td>-</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-red-800 border-b-2 border-red-800 mb-4 mt-8">WARSAW PACT</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>SRV</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>Motorstrelki Squad</td><td>5+</td><td>6+</td><td>6"</td><td>7+</td><td>-</td></tr>
+                    <tr><td>Conscript Squad</td><td>6+</td><td>7+</td><td>6"</td><td>8+</td><td>-</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-slate-800 border-b-2 border-slate-400 mb-4 mt-8">NEW PRUSSIA</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>SRV</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>Prussian Grenadiers</td><td>4+</td><td>5+</td><td>6"</td><td>6+</td><td>-</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-orange-800 border-b-2 border-orange-400 mb-4 mt-8">BREAK AWAY REPUBLICS</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>SRV</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>Militia Fighters</td><td>6+</td><td>7+</td><td>6"</td><td>8+</td><td>-</td></tr>
+                    <tr><td>Veteran Partisans</td><td>5+</td><td>6+</td><td>6"</td><td>7+</td><td>Entrench</td></tr>
+                </tbody>
+            </table>
+
+            <h2>12. VEHICLES & ARMOR</h2>
+
+            <h3 class="text-blue-800 border-b-2 border-blue-800 mb-4 mt-10">NATO</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>ARM (F/S/R)</th><th>CLASS</th></tr></thead>
+                <tbody>
+                    <tr><td>M1 Abrams</td><td>5+</td><td>6+</td><td>10"</td><td>9 / 7 / 3</td><td>H. Vehicle</td></tr>
+                    <tr><td>M2 Bradley</td><td>5+</td><td>6+</td><td>12"</td><td>4 / 3 / 2</td><td>IFV</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-red-800 border-b-2 border-red-800 mb-4 mt-8">WARSAW PACT</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>ARM (F/S/R)</th><th>CLASS</th></tr></thead>
+                <tbody>
+                    <tr><td>T-72 / T-80</td><td>6+</td><td>6+</td><td>10"</td><td>8 / 6 / 2</td><td>Vehicle</td></tr>
+                    <tr><td>BMP-2</td><td>6+</td><td>6+</td><td>12"</td><td>4 / 3 / 2</td><td>IFV</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-slate-800 border-b-2 border-slate-400 mb-4 mt-8">NEW PRUSSIA</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>ARM (F/S/R)</th><th>CLASS</th></tr></thead>
+                <tbody>
+                    <tr><td>Leopard 2A4 (Prussian)</td><td>4+</td><td>5+</td><td>12"</td><td>9 / 7 / 3</td><td>H. Vehicle</td></tr>
+                    <tr><td>Marder IFV</td><td>4+</td><td>5+</td><td>12"</td><td>5 / 4 / 2</td><td>IFV</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-orange-800 border-b-2 border-orange-400 mb-4 mt-8">BREAK AWAY REPUBLICS</h3>
+            <table>
+                <thead><tr><th>IDENTIFIER</th><th>TRN</th><th>LDR</th><th>MOV</th><th>ARM (F/S/R)</th><th>CLASS</th></tr></thead>
+                <tbody>
+                    <tr><td>Captured T-62</td><td>6+</td><td>7+</td><td>10"</td><td>7 / 5 / 2</td><td>Vehicle</td></tr>
+                    <tr><td>Armed Technical</td><td>6+</td><td>7+</td><td>14"</td><td>2 / 2 / 1</td><td>Light Vehicle</td></tr>
+                </tbody>
+            </table>
+
+            <h2>13. WEAPON SYSTEMS</h2>
+            
+            <h3 class="text-blue-800 border-b-2 border-blue-800 mb-4 mt-10">NATO ARSENAL (1985-1987)</h3>
+            <table>
+                <thead><tr><th>SYSTEM</th><th>DICE</th><th>RNG</th><th>PEN</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>M16A2 Rifle</td><td>2</td><td>20"</td><td>0</td><td>-</td></tr>
+                    <tr><td>L85A1 / FAMAS</td><td>2</td><td>18"</td><td>0</td><td>-</td></tr>
+                    <tr><td>G3 / SLR Rifle</td><td>2</td><td>24"</td><td>1</td><td>-</td></tr>
+                    <tr><td>M249 SAW</td><td>4</td><td>30"</td><td>1</td><td>Suppression</td></tr>
+                    <tr><td>L7A2 GPMG / M60</td><td>5</td><td>36"</td><td>2</td><td>Suppression</td></tr>
+                    <tr><td>AT4 / LAW</td><td>1</td><td>20"</td><td>4</td><td>One Shot</td></tr>
+                    <tr><td>Carl Gustaf M2</td><td>1</td><td>30"</td><td>4</td><td>Blast (2)</td></tr>
+                    <tr><td>Milan ATGM</td><td>1</td><td>48"</td><td>5</td><td>Wire-Guided, Reload (2)</td></tr>
+                    <tr><td>BGM-71 TOW</td><td>1</td><td>48"</td><td>4</td><td>Wire-Guided, Reload (2)</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-red-800 border-b-2 border-red-800 mb-4 mt-10">WARSAW PACT ARSENAL (1985-1987)</h3>
+            <table>
+                <thead><tr><th>SYSTEM</th><th>DICE</th><th>RNG</th><th>PEN</th><th>SPECIAL RULES</th></tr></thead>
+                <tbody>
+                    <tr><td>AK-74</td><td>2</td><td>16"</td><td>0</td><td>-</td></tr>
+                    <tr><td>AKM / Type 56</td><td>2</td><td>16"</td><td>1</td><td>-</td></tr>
+                    <tr><td>RPK-74 LMG</td><td>3</td><td>20"</td><td>0</td><td>Suppression</td></tr>
+                    <tr><td>PKM GPMG</td><td>5</td><td>36"</td><td>2</td><td>Suppression</td></tr>
+                    <tr><td>GP-25 Grenade Lchr</td><td>1</td><td>16"</td><td>2</td><td>Blast (3), Arc Fire</td></tr>
+                    <tr><td>NSVT / DShK HMG</td><td>5</td><td>48"</td><td>3</td><td>AA, Suppression</td></tr>
+                    <tr><td>RPG-18 / 22</td><td>1</td><td>12"</td><td>4</td><td>One Shot</td></tr>
+                    <tr><td>RPG-7V2</td><td>1</td><td>18"</td><td>3</td><td>Blast (2)</td></tr>
+                    <tr><td>AT-4 Spigot</td><td>1</td><td>40"</td><td>4</td><td>Wire-Guided, Reload (1)</td></tr>
+                    <tr><td>AT-5 Spandrel</td><td>1</td><td>48"</td><td>5</td><td>Wire-Guided, Reload (2)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: FORCES                              -->
+        <!-- ========================================== -->
+        <div id="tab-forces" class="tab-content hidden">
+            <h2>14. OPERATIONAL FORCES</h2>
+            <p class="mb-6 italic">Current combat zone involves four distinct geopolitical entities (Post-Feb 1987). Identification and engagement protocols differ per faction.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- NEW PRUSSIA -->
+                <div class="manual-block">
+                    <h3 class="mt-0 text-slate-800 border-b border-slate-400">NEW PRUSSIA (THE EMPIRE)</h3>
+                    <p class="text-sm mb-4">The epicenter of the current crisis. Following the mysterious "Iron Cross" PMC interventions in 1986, Emperor Friedrich-Wilhelm von Hohen-Strelitz revealed his hand on February 15, 1987. Claiming sovereignty over Germany, Sweden, Poland, and Scandinavia, the Restauratio Borussica is built on iron discipline and secret West German technology. Led by Gen-Major von der Schulenburg, they field advanced, highly disciplined forces emblazoned with the Geometric Black Eagle.</p>
+                    <ul class="text-xs mono-text space-y-1">
+                        <li>- HIGH TRN (4+) AND LDR (5+) STATS</li>
+                        <li>- SPECIALIZED ADVANCED ARMOR</li>
+                        <li>- EMPHASIS ON TECHNOLOGICAL SUPERIORITY</li>
+                    </ul>
+                </div>
+
+                <!-- NATO -->
+                <div class="manual-block">
+                    <h3 class="mt-0 text-blue-800 border-b border-blue-400">NATO (THE DECAPITATED WEST)</h3>
+                    <p class="text-sm mb-4">A coalition in absolute shock. Reeling from the nuclear destruction of Hamburg in '86, the West suffered a lethal blow in January 1987 when the Geneva Bombing killed the US President and British PM. Compounding this, their intelligence networks were entirely scrubbed from the inside by Prussian architect Elena von Zitzewitz-Moltke. Paralyzed and stretched thin without their central European foothold, they fight a desperate defensive war.</p>
+                    <ul class="text-xs mono-text space-y-1">
+                        <li>- VERSATILE INFANTRY SYSTEMS</li>
+                        <li>- RELIANCE ON AIR SUPERIORITY (AA RULES)</li>
+                        <li>- WIDE RANGE OF COMBINED ARMS</li>
+                    </ul>
+                </div>
+
+                <!-- WARSAW PACT -->
+                <div class="manual-block">
+                    <h3 class="mt-0 text-red-800 border-b border-red-400">THE WARSAW PACT</h3>
+                    <p class="text-sm mb-4">The Soviet Union has descended into chaos. Following Marshal Volkov's military coup and Gorbachev's imprisonment, Volkov himself was assassinated in late January 1987. The resulting power vacuum has left the Eastern Bloc in open revolt. Despite the turmoil, the Pact remains a terrifying juggernaut. They rely on massed artillery and rugged, battle-tested armor to try and crush the Prussian uprising by sheer force of numbers.</p>
+                    <ul class="text-xs mono-text space-y-1">
+                        <li>- MASSED ARTILLERY (ARC FIRE / BLAST)</li>
+                        <li>- HEAVY, RUGGED VEHICLE DESIGNS</li>
+                        <li>- AGGRESSIVE ASSAULT DOCTRINE</li>
+                    </ul>
+                </div>
+
+                <!-- THE BREAK AWAY REPUBLICS -->
+                <div class="manual-block">
+                    <h3 class="mt-0 text-orange-800 border-b border-orange-400">BREAK AWAY REPUBLICS</h3>
+                    <p class="text-sm mb-4">Comprising Czechoslovakia, Hungary, Romania, Bulgaria, Austria, Yugoslavia, and Albania, these nations have been caught between the Prussian blitz and Soviet internal collapse. Local commanders have seized control in the vacuum, prioritizing survival and independence. Using a mixture of stolen Warsaw Pact equipment, captured NATO gear, and improvised tactics, they wage a brutal, asymmetric war against anyone crossing their borders.</p>
+                    <ul class="text-xs mono-text space-y-1">
+                        <li>- AMBUSH TACTICS (GONE TO GROUND FOCUS)</li>
+                        <li>- MIXED WEAPONRY (NATO / PACT HYBRIDS)</li>
+                        <li>- GUERRILLA WARFARE EXPERTS</li>
+                    </ul>
+                </div>
             </div>
-            <h2>12. WEAPON SYSTEMS</h2>
-            <div class="overflow-x-auto">
-                <table>
-                    <thead><tr><th>SYSTEM</th><th>DICE</th><th>RNG</th><th>PEN</th><th>TRAITS</th></tr></thead>
-                    <tbody>
-                        <tr><td>AK-74</td><td>2</td><td>16"</td><td>0</td><td>-</td></tr>
-                        <tr><td>BGM-71 TOW</td><td>1</td><td>48"</td><td>4</td><td>Wire-Guided, Reload (2)</td></tr>
-                    </tbody>
-                </table>
+
+            <div class="manual-block text-center mt-6">
+                <p class="mono-text text-sm">ENGAGEMENT PROTOCOL: THE OLD WORLD ORDER IS DEAD. ALL NON-ALIGNED FORCES ARE TO BE TREATED AS HOSTILES.</p>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: THEATRE MAP                         -->
+        <!-- ========================================== -->
+        <div id="tab-map" class="tab-content hidden">
+            <h2>15. THEATRE MAP: EUROPEAN CRISIS (FEB 1987)</h2>
+            <p class="mb-6 text-sm text-slate-700 italic border-l-4 border-slate-400 pl-4">CLICK A HIGHLIGHTED REGIONAL ZONE OR INCIDENT MARKER ON THE STRATEGIC MAP BELOW TO REVIEW CURRENT INTELLIGENCE AND HISTORICAL LOGS.</p>
+
+            <div class="flex flex-col gap-6">
+                
+                <!-- Top: Interactive Map Overlays (Full Width) -->
+                <div class="w-full">
+                    <div class="tactical-map theatre-bg w-full h-[500px] md:h-[600px] lg:h-[750px]">
+                        <!-- SVG viewbox spans the whole area. The paths create invisible clickable blocks that highlight on hover -->
+                        <svg viewBox="0 0 800 600" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+
+                            <!-- REGIONAL ZONES (Jigsaw polygons covering the map) -->
+                            
+                            <!-- NATO ZONE (West) -->
+                            <g class="faction-group faction-nato" onclick="updateMapReadout('nato')">
+                                <path class="fill-layer" d="M 0,0 L 250,0 L 340,250 L 340,300 L 360,350 L 350,380 L 400,420 L 440,460 L 460,500 L 520,460 L 640,460 L 800,460 L 800,600 L 0,600 Z" />
+                                <path class="border-layer" d="M 0,0 L 250,0 L 340,250 L 340,300 L 360,350 L 350,380 L 400,420 L 440,460 L 460,500 L 520,460 L 640,460 L 800,460 L 800,600 L 0,600 Z" />
+                                <text class="faction-label" x="150" y="380">NATO CMD</text>
+                            </g>
+
+                            <!-- NEW PRUSSIA ZONE (Center/North) -->
+                            <g class="faction-group faction-prussia" onclick="updateMapReadout('prussia')">
+                                <path class="fill-layer" d="M 250,0 L 550,0 L 550,150 L 500,250 L 540,310 L 460,310 L 380,330 L 360,350 L 340,300 L 340,250 Z" />
+                                <path class="border-layer" d="M 250,0 L 550,0 L 550,150 L 500,250 L 540,310 L 460,310 L 380,330 L 360,350 L 340,300 L 340,250 Z" />
+                                <text class="faction-label" x="350" y="200">NEW PRUSSIA</text>
+                            </g>
+
+                            <!-- BREAK AWAY REPUBLICS ZONE (Buffer States) -->
+                            <g class="faction-group faction-breakaway" onclick="updateMapReadout('breakaway')">
+                                <path class="fill-layer" d="M 360,350 L 380,330 L 460,310 L 540,310 L 580,300 L 640,320 L 650,380 L 640,460 L 520,460 L 460,500 L 440,460 L 400,420 L 350,380 Z" />
+                                <path class="border-layer" d="M 360,350 L 380,330 L 460,310 L 540,310 L 580,300 L 640,320 L 650,380 L 640,460 L 520,460 L 460,500 L 440,460 L 400,420 L 350,380 Z" />
+                                <text class="faction-label" x="425" y="400" transform="rotate(-10 500 400)">BUFFER STATES</text>
+                            </g>
+
+                            <!-- WARSAW PACT ZONE (East) -->
+                            <g class="faction-group faction-pact" onclick="updateMapReadout('pact')">
+                                <path class="fill-layer" d="M 550,0 L 800,0 L 800,460 L 640,460 L 650,380 L 640,320 L 580,300 L 540,310 L 500,250 L 550,150 Z" />
+                                <path class="border-layer" d="M 550,0 L 800,0 L 800,460 L 640,460 L 650,380 L 640,320 L 580,300 L 540,310 L 500,250 L 550,150 Z" />
+                                <text class="faction-label" x="500" y="250" transform="rotate(10 550 250)">WARSAW PACT</text>
+                            </g>
+
+                            <!-- INCIDENT MARKERS -->
+                            
+                            <!-- Hamburg (1986) -->
+                            <g class="incident-marker" onclick="updateMapReadout('evt-hamburg')" transform="translate(380, 260)">
+                                <circle class="ring" cx="0" cy="0" r="10"/>
+                                <circle class="core" cx="0" cy="0" r="4" />
+                                <text class="incident-label" x="-14" y="5" text-anchor="end">HAMBURG '86</text>
+                            </g>
+
+                            <!-- Geneva (Jan 1987) -->
+                            <g class="incident-marker" onclick="updateMapReadout('evt-geneva')" transform="translate(340, 420)">
+                                <circle class="ring" cx="0" cy="0" r="10"/>
+                                <circle class="core" cx="0" cy="0" r="4" />
+                                <text class="incident-label" x="14" y="5">GENEVA '87</text>
+                            </g>
+
+                            <!-- Berlin/Broadcast (Feb 1987) -->
+                            <g class="incident-marker" onclick="updateMapReadout('evt-berlin')" transform="translate(460, 230)">
+                                <circle class="ring" cx="0" cy="0" r="10"/>
+                                <circle class="core" cx="0" cy="0" r="4" />
+                                <text class="incident-label" x="14" y="5">BERLIN '87</text>
+                            </g>
+
+                            <!-- Moscow (Jan 1987) -->
+                            <g class="incident-marker" onclick="updateMapReadout('evt-moscow')" transform="translate(740, 160)">
+                                <circle class="ring" cx="0" cy="0" r="10"/>
+                                <circle class="core" cx="0" cy="0" r="4" />
+                                <text class="incident-label" x="-14" y="5" text-anchor="end">MOSCOW '87</text>
+                            </g>
+
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Bottom: Information Dossier Panel (Full Width) -->
+                <div class="w-full">
+                    <div class="dossier-panel p-6 rounded-sm relative font-sans w-full">
+                        
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-end border-b-4 border-ink pb-2 mb-4">
+                            <div>
+                                <p class="text-xs font-bold tracking-[0.2em] text-stamp mb-1">INTELLIGENCE DOSSIER</p>
+                                <h3 id="readout-title" class="mt-0 text-2xl md:text-3xl font-stencil text-ink uppercase tracking-wide">AWAITING SELECTION</h3>
+                            </div>
+                            <div class="mt-4 md:mt-0">
+                                <span id="readout-status" class="bg-ink text-white font-mono px-3 py-2 text-sm tracking-widest uppercase shadow-sm">STANDBY</span>
+                            </div>
+                        </div>
+                        
+                        <div id="readout-desc" class="text-[1.05rem] leading-relaxed text-olive-800 min-h-[150px] font-medium transition-opacity duration-200">
+                            Click a highlighted territorial zone or an incident marker on the strategic map above to load current intelligence, geopolitical status, and historical data logs.
+                            <br><br>
+                            End of File.
+                        </div>
+
+                        <div class="absolute bottom-4 right-6 text-[0.65rem] font-mono text-olive-900 opacity-60 font-bold">
+                            REF // 0x4B2A // CLEARED
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <footer class="border-t-4 border-olive-900 pt-8 mt-16 text-center mono-text uppercase text-xs tracking-[0.2em] text-olive-800">
             <p class="mb-2">Property of Tactical Command - Dissemination Prohibited</p>
             <p class="mb-2">On the Brink // Doctrine 0.3 // Sector 7 Cleared</p>
-            <p class="font-bold">OnTheBrink: Tactical Wargame &copy;2025 JDD</p>
+            <p class="font-bold">OnTheBrink: Tactical Wargame &copy; 2026 JDD</p>
         </footer>
     </div>
 
     <script>
+        // Tab Navigation Logic
         function openTab(tabId, btnElement) {
             const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.add('hidden'));
-            contents.forEach(content => content.classList.remove('active'));
+            contents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('active');
+            });
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('active');
@@ -617,6 +853,77 @@
             activeContent.classList.add('active');
             btnElement.classList.add('active');
             btnElement.classList.remove('border-b-4');
+        }
+
+        // Interactive Map Logic
+        const mapData = {
+            'prussia': { 
+                title: "THE PRUSSIAN EMPIRE", 
+                status: "HOSTILE / EXPANDING", 
+                desc: "<strong>DECLARED:</strong> February 15, 1987.<br><br><strong>LEADER:</strong> Emperor Friedrich-Wilhelm von Hohen-Strelitz.<br><br><strong>TERRITORY CLAIMS:</strong> Germany, Poland, Sweden, Finland, Norway, and Denmark.<br><br><strong>SUMMARY:</strong> Having capitalized on the Hamburg nuclear trauma and leveraging Adler Capital's debt-traps against NATO, the 'Shadow Junkers' have stepped into the light. Their forces are highly disciplined, equipped with advanced West German technology, and aggressively expanding their borders to secure their new Empire." 
+            },
+            'nato': { 
+                title: "NATO REMNANTS", 
+                status: "CRITICAL / PARALYZED", 
+                desc: "<strong>CURRENT STATE:</strong> Decapitated and disorganized.<br><br><strong>SUMMARY:</strong> NATO suffered a catastrophic blow in January 1987 when the Geneva Bombing killed the US President and British PM. Simultaneously, top NATO intelligence strategist Elena von Zitzewitz-Moltke revealed her Prussian loyalties, vanishing after completely scrubbing NATO databases from the inside.<br><br><strong>STRATEGY:</strong> Stripped of their central European footholds and leadership, remaining forces are stretched thin, fighting a desperate, uncoordinated defensive war." 
+            },
+            'pact': { 
+                title: "WARSAW PACT", 
+                status: "INTERNAL REVOLT", 
+                desc: "<strong>CURRENT STATE:</strong> Power vacuum / Civil Conflict.<br><br><strong>SUMMARY:</strong> The Soviet Union is in absolute turmoil. Following Marshal Volkov's military coup and the imprisonment of Gorbachev, Volkov himself was assassinated in late January 1987. <br><br><strong>STRATEGY:</strong> Despite fractured leadership and open revolt across the Eastern Bloc, the Pact remains a terrifying juggernaut. Commanders are attempting to crush the Prussian uprising with massed artillery and sheer force of numbers while fighting internal rivals." 
+            },
+            'breakaway': { 
+                title: "BREAK AWAY REPUBLICS", 
+                status: "UNSTABLE / GUERRILLA", 
+                desc: "<strong>TERRITORY INCLUDES:</strong> Czechoslovakia, Hungary, Romania, Bulgaria, Austria, Yugoslavia, and Albania.<br><br><strong>CURRENT STATE:</strong> Hostile Buffer Zone.<br><br><strong>SUMMARY:</strong> The former 'shield' states of the Soviet Union have collapsed into chaos. Caught between the Prussian blitzkrieg and Soviet internal collapse, local commanders and militias have seized control.<br><br><strong>STRATEGY:</strong> They wage a brutal, asymmetric guerrilla war against all foreign incursions, utilizing a mix of stolen Warsaw Pact equipment and captured NATO gear to maintain independence." 
+            },
+            'evt-hamburg': { 
+                title: "INCIDENT: HAMBURG", 
+                status: "NUCLEAR FALLOUT", 
+                desc: "<strong>DATE:</strong> 1986.<br><br><strong>EVENT:</strong> The world's first major nuclear strike since 1945. <br><br><strong>IMPACT:</strong> The total destruction of Hamburg left a permanent scar on the European psyche. In the ensuing chaos and desperation, the PMC known as 'Iron Cross' stepped in as saviors, laying the groundwork for the Prussian military to eventually seize control." 
+            },
+            'evt-geneva': { 
+                title: "INCIDENT: GENEVA", 
+                status: "DECAPITATION STRIKE", 
+                desc: "<strong>DATE:</strong> January 1987.<br><br><strong>EVENT:</strong> A highly coordinated and devastating bombing at a summit in Geneva.<br><br><strong>CASUALTIES:</strong> The President of the United States and the British Prime Minister, alongside numerous high-ranking NATO officials.<br><br><strong>IMPACT:</strong> Plunged the Western alliance into immediate paralysis, paving the way for the Prussian declaration weeks later." 
+            },
+            'evt-moscow': { 
+                title: "INCIDENT: MOSCOW", 
+                status: "COUP & ASSASSINATION", 
+                desc: "<strong>DATE:</strong> January 1987.<br><br><strong>EVENT:</strong> Marshal Volkov deposes Mikhail Gorbachev in a sudden military coup, seizing control of the Soviet apparatus. <br><br><strong>FOLLOW-UP:</strong> Merely weeks later, Volkov is assassinated. The resulting power vacuum triggers a massive internal conflict and open revolt across the Eastern Bloc." 
+            },
+            'evt-berlin': { 
+                title: "THE RESTORATION", 
+                status: "GLOBAL BROADCAST", 
+                desc: "<strong>DATE:</strong> February 15, 1987.<br><br><strong>EVENT:</strong> Emperor Friedrich-Wilhelm goes live on a global television broadcast.<br><br><strong>CONTENT:</strong> He officially declares the Restauratio Borussica (The Restoration of the Prussian Empire). He demands the immediate withdrawal of all foreign forces from 'Imperial' soil, formally initiating the multi-front war that currently engulfs Europe." 
+            }
+        };
+
+        function updateMapReadout(key) {
+            const data = mapData[key];
+            if (!data) return;
+
+            const descEl = document.getElementById('readout-desc');
+            const titleEl = document.getElementById('readout-title');
+            const statusEl = document.getElementById('readout-status');
+
+            // Quick fade out/in effect
+            descEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                titleEl.innerText = data.title;
+                statusEl.innerText = "STATUS: " + data.status;
+                
+                // Color code the status badge based on faction/event
+                statusEl.className = "text-white font-mono px-2 py-1 text-xs tracking-widest uppercase shadow-sm ";
+                if (key === 'nato') statusEl.classList.add('bg-blue-600');
+                else if (key === 'pact' || key.startsWith('evt-')) statusEl.classList.add('bg-stamp');
+                else if (key === 'breakaway') statusEl.classList.add('bg-orange-600');
+                else statusEl.classList.add('bg-slate-700'); // Prussia
+                
+                descEl.innerHTML = data.desc;
+                descEl.style.opacity = '1';
+            }, 100);
         }
     </script>
 </body>
