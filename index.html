@@ -1,75 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Replace the entire <head> section of your ORIGINAL TacticalManual.html with this code -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ON THE BRINK // TACTICAL INTERFACE</title>
+    <title>ON THE BRINK // FIELD MANUAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // The new tactical palette
-                        'nato-green': '#3e4c31',
-                        'nato-dark': '#242b1d',
-                        'tactical-gray': '#1a1d1a',
-                        'signal-orange': '#ff8c00',
-                        'warning-yellow': '#ffd700',
-                        'paper-light': '#e5e1d8',
-                        
-                        // MAPPING YOUR ORIGINAL CLASS NAMES TO THE NEW THEME:
-                        // This forces your existing content to automatically adopt the new look
-                        paper: '#1a1d1a',        // Replaces light 'paper' bg with Tactical Gray
-                        ink: '#e5e1d8',          // Replaces dark 'ink' text with Paper Light
+                        paper: '#f4f4eb',
+                        ink: '#1a1a1a',
                         olive: {
-                            700: '#3e4c31',      // Maps to Nato Green
-                            800: '#242b1d',      // Maps to Nato Dark
-                            900: '#1a1d1a',      // Maps to Tactical Gray
+                            700: '#4a513d',
+                            800: '#3b4231',
+                            900: '#262b1f',
                         },
-                        stamp: '#ff8c00',        // Maps red 'stamp' to Signal Orange
-                        sea: '#242b1d'           // Maps 'sea' to Nato Dark
+                        stamp: '#b91c1c',
+                        sea: '#d1d9e0'
                     },
                     fontFamily: {
-                        // Mapping your original font classes to the new fonts
-                        stencil: ['"JetBrains Mono"', 'monospace'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                        sans: ['Inter', 'sans-serif']
+                        stencil: ['"Black Ops One"', 'cursive'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        sans: ['"Inter"', 'sans-serif']
                     }
                 }
             }
         }
     </script>
     <style>
-        /* The new CRT scanline and grid background */
+        @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter:wght@400;500;700&family=Share+Tech+Mono&display=swap');
+        
         body {
-            background-color: #1a1d1a;
-            background-image: 
-                linear-gradient(rgba(62, 76, 49, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(62, 76, 49, 0.08) 1px, transparent 1px);
-            background-size: 20px 20px;
-            color: #e5e1d8;
+            background-color: #f4f4eb;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            color: #1a1a1a;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            font-size: 1.05rem;
+            line-height: 1.7;
         }
 
-        .scanline {
-            width: 100%;
-            height: 100px;
-            z-index: 10;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(62, 76, 49, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0.1;
-            position: fixed;
-            bottom: 100%;
+        h1, h2, h3, h4 {
+            font-family: 'Black Ops One', cursive;
+            letter-spacing: 0.05em;
+            color: #262b1f;
+        }
+
+        h2 {
+            border-bottom: 3px solid #262b1f;
+            padding-bottom: 0.5rem;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            color: #3b4231;
+            text-transform: uppercase;
+        }
+
+        .mono-text {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .stamp-classified {
+            color: #b91c1c;
+            border: 5px solid #b91c1c;
+            display: inline-block;
+            padding: 0.25rem 1.5rem;
+            font-family: 'Black Ops One', cursive;
+            font-size: 1.75rem;
+            transform: rotate(-4deg);
+            opacity: 0.85;
+            user-select: none;
             pointer-events: none;
-            animation: scanline 8s linear infinite;
         }
 
-        @keyframes scanline {
-            0% { bottom: 100%; }
-            100% { bottom: -100px; }
+        .manual-block {
+            border: 2px solid #262b1f;
+            background-color: rgba(38, 43, 31, 0.04);
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .manual-block::before {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px solid rgba(38, 43, 31, 0.15);
+            pointer-events: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 2px solid #262b1f;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        th, td {
+            border: 1px solid #262b1f;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e5e5dc;
+            font-family: 'Black Ops One', cursive;
+            font-weight: normal;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tactical-map {
+            background-color: #d1d9e0; /* Lighter sea color fallback */
+            border: 2px solid #262b1f;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.15);
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .theatre-bg {
+            /* Google Drive blocks CSS embedding. Using the public Wikimedia source of the same map. */
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)),
+                url('https://upload.wikimedia.org/wikipedia/commons/0/02/Cold_war_europe_military_alliances_map_en.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .tab-btn {
+            font-family: 'Black Ops One', cursive;
+            transition: all 0.2s ease;
+            letter-spacing: 0.05em;
+            font-size: 0.85rem;
+            padding: 0.75rem 0.5rem;
+        }
+        @media (min-width: 768px) {
+            .tab-btn { font-size: 1.05rem; padding: 0.75rem 1rem; }
+        }
+
+        .tab-btn.active {
+            background-color: #f4f4eb;
+            color: #262b1f;
+            border-bottom-color: #f4f4eb;
+        }
+        .tab-btn:not(.active) {
+            background-color: #d6d6ce;
+            color: #5a6053;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #e5e5dc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container-main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        strong {
+            font-weight: 700;
+            color: #262b1f;
+        }
+
+        /* Interactive Map Overlay Zones */
+        .faction-group path {
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .faction-group .fill-layer {
+            fill-opacity: 0; /* Fully transparent by default to see map */
+        }
+        .faction-group .border-layer {
+            stroke-width: 2;
+            stroke-opacity: 0; /* Hidden borders until hover */
+            fill: none;
+        }
+        .faction-group .faction-label {
+            font-family: 'Black Ops One', cursive;
+            font-size: 26px;
+            letter-spacing: 3px;
+            pointer-events: none;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            paint-order: stroke;
+            stroke: #0f172a;
+            stroke-width: 6px;
+            stroke-opacity: 0.8;
+            stroke-linejoin: round;
+        }
+
+        /* Hover States for Factions */
+        .faction-group:hover path.fill-layer {
+            fill-opacity: 0.4;
+        }
+        .faction-group:hover path.border-layer {
+            stroke-width: 4;
+            stroke-opacity: 0.9;
+        }
+        .faction-group:hover .faction-label {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* Specific Faction Colors */
+        .faction-nato .fill-layer { fill: #3b82f6; }
+        .faction-nato .border-layer { stroke: #60a5fa; }
+        .faction-nato .faction-label { fill: #93c5fd; }
+
+        .faction-prussia .fill-layer { fill: #94a3b8; }
+        .faction-prussia .border-layer { stroke: #cbd5e1; }
+        .faction-prussia .faction-label { fill: #f8fafc; }
+
+        .faction-breakaway .fill-layer { fill: #f97316; }
+        .faction-breakaway .border-layer { stroke: #fdba74; }
+        .faction-breakaway .faction-label { fill: #fed7aa; }
+
+        .faction-pact .fill-layer { fill: #ef4444; }
+        .faction-pact .border-layer { stroke: #f87171; }
+        .faction-pact .faction-label { fill: #fca5a5; }
+
+        /* Incident Markers */
+        .incident-marker {
+            cursor: pointer;
+        }
+        .incident-marker circle.core {
+            fill: #facc15;
+            stroke: #0f172a;
+            stroke-width: 2;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .incident-marker circle.ring {
+            fill: none;
+            stroke: #facc15;
+            stroke-width: 2;
+            stroke-dasharray: 4,2;
+            transition: all 0.3s ease;
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        .incident-marker .incident-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            fill: #facc15;
+            pointer-events: none;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            paint-order: stroke;
+            stroke: #0f172a;
+            stroke-width: 5px;
+            stroke-opacity: 0.9;
+        }
+        .incident-marker:hover circle.core {
+            fill: #ef4444;
+            stroke: #ffffff;
+            transform: scale(1.3);
+        }
+        .incident-marker:hover circle.ring {
+            stroke: #ef4444;
+            transform: scale(1.5);
+            stroke-width: 1.5;
+            stroke-dasharray: 0;
+        }
+        .incident-marker:hover .incident-label {
+            opacity: 1;
+            fill: #ffffff;
+            transform: translateX(8px);
+        }
+
+        /* Dossier Styles */
+        .dossier-panel {
+            background-color: #ffffff;
+            border: 2px solid #262b1f;
+            box-shadow: 4px 4px 0px rgba(38, 43, 31, 0.15);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            @page { margin: 1.5cm; }
+            body { background: white !important; background-image: none !important; font-size: 10pt; color: black !important; }
+            .container-main { max-width: none; padding: 0; margin: 0; }
+            nav, .tab-btn, .no-print { display: none !important; }
+            .tab-content { display: block !important; opacity: 1 !important; transform: none !important; margin-bottom: 3rem; }
+            h2 { page-break-before: always; border-bottom: 2pt solid black !important; color: black !important; padding-top: 1rem; }
+            .manual-block, .dossier-panel { background: transparent !important; border: 1pt solid black !important; page-break-inside: avoid; box-shadow: none !important; }
+            .manual-block::before { display: none; }
+            .tactical-map { page-break-inside: avoid; border: 1pt solid black !important; box-shadow: none !important; background: transparent !important; }
+            .faction-group path { fill: transparent !important; stroke: black !important; stroke-width: 1pt !important; stroke-opacity: 1 !important; }
+            .faction-group .faction-label { opacity: 1 !important; fill: black !important; stroke: none !important; }
+            .incident-marker .incident-label { opacity: 1 !important; fill: black !important; stroke: none !important; }
+            table { page-break-inside: avoid; border: 1pt solid black !important; }
+            th { background: #eee !important; color: black !important; }
+            .stamp-classified { border: 3pt solid #b91c1c !important; color: #b91c1c !important; }
+            footer { border-top: 1pt solid black !important; page-break-after: avoid; }
+            * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
         }
     </style>
 </head>
